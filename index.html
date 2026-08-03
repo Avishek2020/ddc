@@ -134,6 +134,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 body.menu-open .nav__burger i:nth-child(1){transform:translateY(4px) rotate(45deg)}
 body.menu-open .nav__burger i:nth-child(2){transform:translateY(-4px) rotate(-45deg)}
 
+/* ---------- language switch ---------- */
+.lang{display:flex;gap:1px;background:rgba(10,11,18,.26);
+  border:1px solid rgba(10,11,18,.26);flex:none;margin-left:auto}
+.lang__b{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.14em;
+  padding:9px 11px;background:var(--oyster);color:#5A5D70;
+  transition:background .35s var(--ease),color .35s var(--ease)}
+.lang__b:hover{color:var(--ink)}
+.lang__b.is-on{background:var(--ink);color:var(--oyster)}
+
 .progress{position:fixed;top:0;left:0;height:2px;background:var(--signal);width:0;z-index:99;transition:width .1s linear}
 
 /* ============================================================
@@ -364,6 +373,53 @@ body.lit .measure{opacity:1}
 .case:hover .tag{border-color:rgba(239,238,233,.4);color:rgba(239,238,233,.9)}
 
 /* ============================================================
+   PRODUCTS  (static — no new motion, same tokens)
+   ============================================================ */
+.prods__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  flex-wrap:wrap;margin-bottom:clamp(30px,4vw,50px)}
+.prods__head h2{font-size:clamp(34px,5.4vw,74px)}
+.prods{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;
+  background:rgba(10,11,18,.16);border:1px solid rgba(10,11,18,.16)}
+.prod{
+  grid-column:span 2;background:var(--oyster);
+  padding:clamp(24px,2.4vw,34px);display:flex;flex-direction:column;
+  transition:background .45s var(--ease);
+}
+.prod:hover{background:var(--oyster-2)}
+.prod--wide{grid-column:span 3}
+.prod__top{display:flex;justify-content:space-between;align-items:center;
+  gap:14px;margin-bottom:clamp(20px,2.4vw,30px)}
+.prod__no{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;color:var(--spec)}
+.prod__status{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;padding:5px 9px;border:1px solid rgba(29,43,224,.4);color:var(--klein)}
+.prod__status--soon{border-color:rgba(255,90,60,.55);color:var(--signal)}
+.prod h3{font-family:var(--f-display);font-variation-settings:"wdth" 112,"wght" 900;
+  text-transform:uppercase;font-size:clamp(22px,2.5vw,34px);letter-spacing:-.02em;
+  line-height:.95;margin:0 0 12px}
+.prod > p{margin:0 0 20px;font-size:15.5px;line-height:1.55;color:#41445A;max-width:46ch}
+.prod ul{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:9px}
+.prod li{font-size:15px;padding-left:20px;position:relative;line-height:1.45}
+.prod li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--klein)}
+.prod .tags{margin:0 0 20px}
+.prod .tag{border-color:rgba(10,11,18,.22);color:#41445A}
+.prod__foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(10,11,18,.18);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  font-family:var(--f-mono);font-size:12.5px;letter-spacing:.05em;color:#41445A}
+.prod__foot a{color:var(--klein);border-bottom:1px solid currentColor;padding-bottom:2px}
+.prod--collab{grid-column:span 6;background:var(--ink);color:var(--oyster)}
+.prod--collab:hover{background:var(--ink)}
+.prod--collab h3{color:var(--oyster)}
+.prod--collab .prod__no{color:rgba(239,238,233,.5)}
+.collab{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(28px,4vw,64px);
+  align-items:start;width:100%}
+.collab p{color:rgba(239,238,233,.72);font-size:15.5px;line-height:1.55;max-width:38ch;margin:0 0 26px}
+.collab__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,32px)}
+.collab__grid > div{padding-top:16px;border-top:1px solid rgba(239,238,233,.24)}
+.collab__grid h4{font-family:var(--f-display);font-variation-settings:"wdth" 100,"wght" 800;
+  text-transform:uppercase;font-size:15px;letter-spacing:.01em;margin:0 0 8px}
+.collab__grid p{margin:0;font-size:14.5px;color:rgba(239,238,233,.68);max-width:none}
+
+/* ============================================================
    PROCESS
    ============================================================ */
 .process{background:var(--oyster-2)}
@@ -528,6 +584,9 @@ body.lit .measure{opacity:1}
   .stats__grid{grid-template-columns:repeat(2,1fr);row-gap:44px}
   .steps{grid-template-columns:repeat(2,1fr)}
   .tracks{grid-template-columns:1fr}
+  .prod{grid-column:span 3}
+  .prod--wide{grid-column:span 6}
+  .collab{grid-template-columns:1fr}
   .faq{grid-template-columns:1fr}
   .foot__cols{grid-template-columns:1fr 1fr}
 }
@@ -540,6 +599,7 @@ body.lit .measure{opacity:1}
   body.menu-open .nav__links{transform:translateY(0)}
   .nav__links a{color:var(--oyster);font-size:15px;letter-spacing:.2em}
   .nav__burger{display:block;z-index:2}
+  .lang{margin-left:auto;margin-right:10px;z-index:2}
   .nav .btn{display:none}
   .stage{cursor:default}
   .seam__label{display:none}
@@ -555,12 +615,14 @@ body.lit .measure{opacity:1}
   .case__meta{justify-content:space-between}
   .case__disc{justify-content:flex-start;max-width:none}
   .contact__grid{grid-template-columns:1fr}
+  .collab__grid{grid-template-columns:1fr}
   .man-foot{gap:26px}
   .hero-foot .spec:first-child{display:none}
 }
 @media (max-width:560px){
   .stats__grid{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr}
+  .prod,.prod--wide{grid-column:span 6}
   .foot__cols{grid-template-columns:1fr}
   .anno{display:none}
 }
@@ -587,11 +649,16 @@ body.lit .measure{opacity:1}
   </a>
   <nav class="nav__links" id="navLinks">
     <a href="#what">What we do</a>
+    <a href="#products">Products</a>
     <a href="#work">Work</a>
     <a href="#process">Process</a>
     <a href="#tracks">Engagements</a>
     <a href="#faq">FAQ</a>
   </nav>
+  <div class="lang" id="lang" role="group" aria-label="Language">
+    <button class="lang__b is-on" data-lang="en" aria-pressed="true">EN</button>
+    <button class="lang__b" data-lang="de" aria-pressed="false">DE</button>
+  </div>
   <a href="#contact" class="btn"><span>Start a project</span></a>
   <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
 </header>
@@ -666,6 +733,7 @@ body.lit .measure{opacity:1}
       <span class="ticker__item">Data platforms</span>
       <span class="ticker__item">AI &amp; agents</span>
       <span class="ticker__item">3D &amp; motion</span>
+      <span class="ticker__item">Beamer &amp; LED supply</span>
     </div>
     <div class="ticker__set">
       <span class="ticker__item">Brand identity</span>
@@ -674,6 +742,7 @@ body.lit .measure{opacity:1}
       <span class="ticker__item">Data platforms</span>
       <span class="ticker__item">AI &amp; agents</span>
       <span class="ticker__item">3D &amp; motion</span>
+      <span class="ticker__item">Beamer &amp; LED supply</span>
     </div>
   </div>
 </div>
@@ -758,6 +827,150 @@ body.lit .measure{opacity:1}
           <div class="tags"><span class="tag">Blender</span><span class="tag">Three.js</span><span class="tag">Product film</span><span class="tag">Configurators</span></div>
         </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= PRODUCTS ========================= -->
+<section class="band" id="products">
+  <div class="wrap">
+    <div class="prods__head">
+      <div>
+        <p class="eyebrow rise" style="margin-bottom:20px">Products &amp; supply</p>
+        <h2 class="display rise" data-d="1">Hardware<br>we ship</h2>
+      </div>
+      <p class="lede rise" data-d="2" style="font-size:17px">Projection and LED, sold as a working room rather than a box on a pallet. Delivered, installed, commissioned.</p>
+    </div>
+
+    <div class="prods">
+
+      <article class="prod rise">
+        <div class="prod__top">
+          <span class="prod__no">01</span>
+          <span class="prod__status">In stock</span>
+        </div>
+        <h3>Beamer &amp; projection</h3>
+        <p>Laser projectors, lenses and screens specified for your room, not from a catalogue page. We calculate the throw, mount it, cable it and commission it on site.</p>
+        <ul>
+          <li>Laser projectors, 5,000–20,000 ANSI lumens</li>
+          <li>Short-throw and ultra-short-throw optics</li>
+          <li>Fixed-frame, motorised and rollable screens</li>
+          <li>Mounts, signal distribution and control</li>
+        </ul>
+        <div class="tags"><span class="tag">Conference</span><span class="tag">Auditorium</span><span class="tag">Museum</span><span class="tag">Retail</span></div>
+        <div class="prod__foot">
+          <span>From €1,890 · per room</span>
+          <a href="#contact">Request a spec</a>
+        </div>
+      </article>
+
+      <article class="prod rise" data-d="1">
+        <div class="prod__top">
+          <span class="prod__no">02</span>
+          <span class="prod__status">Made to order</span>
+        </div>
+        <h3>Rollable LED display</h3>
+        <p>The Rolling series — FAST, GATE and FLOOR. The panel rolls into a flight case, goes up with two people, and carries a walk-on load where the floor version is used.</p>
+        <ul>
+          <li>Pixel pitch P2.5 – P5.9</li>
+          <li>Indoor, outdoor IP65 and floor-rated builds</li>
+          <li>Roll-up transport — no truss on standard spans</li>
+          <li>Spare modules and receiving cards held in stock</li>
+        </ul>
+        <div class="tags"><span class="tag">Events</span><span class="tag">Touring</span><span class="tag">Rental</span><span class="tag">Stage</span></div>
+        <div class="prod__foot">
+          <span>Quoted per m² · 4–6 weeks</span>
+          <a href="#contact">Get a quote</a>
+        </div>
+      </article>
+
+      <article class="prod rise" data-d="2">
+        <div class="prod__top">
+          <span class="prod__no">03</span>
+          <span class="prod__status prod__status--soon">Pre-launch</span>
+        </div>
+        <h3>New products</h3>
+        <p>What is next on the line. The first production run goes to a small group of customers who want a say in the final specification.</p>
+        <ul>
+          <li>Transparent LED mesh for glass façades</li>
+          <li>Battery-backed mobile LED trolley</li>
+          <li>All-in-one meeting-room projection bar</li>
+        </ul>
+        <div class="tags"><span class="tag">Q4 2026</span><span class="tag">Limited run</span><span class="tag">Pilot pricing</span></div>
+        <div class="prod__foot">
+          <span>Early-access list open</span>
+          <a href="#contact">Join the list</a>
+        </div>
+      </article>
+
+      <article class="prod prod--wide rise" data-d="1">
+        <div class="prod__top">
+          <span class="prod__no">04</span>
+          <span class="prod__status prod__status--soon">In research</span>
+        </div>
+        <h3>Research products</h3>
+        <p>Work that is not a product yet. We prototype with partners who have a real installation to test in, and we publish what we learn rather than sitting on it.</p>
+        <ul>
+          <li>Micro-LED below 1&nbsp;mm pitch — thermal behaviour and yield</li>
+          <li>Content scaler that fits any source to any wall geometry</li>
+          <li>Sensor-driven brightness and power-draw modelling</li>
+          <li>Serviceability: field-replaceable modules without a hot-melt rig</li>
+        </ul>
+        <div class="tags"><span class="tag">Prototype</span><span class="tag">Test site wanted</span><span class="tag">Open notes</span></div>
+        <div class="prod__foot">
+          <span>Co-funded pilots · shared IP terms</span>
+          <a href="#contact">Read the notes</a>
+        </div>
+      </article>
+
+      <article class="prod prod--wide rise" data-d="2">
+        <div class="prod__top">
+          <span class="prod__no">05</span>
+          <span class="prod__status">Supply chain</span>
+        </div>
+        <h3>Sourcing &amp; service</h3>
+        <p>Everything around the panel, because that is where projects usually stall. One contract for the hardware, the freight, the paperwork and the years after handover.</p>
+        <ul>
+          <li>CE, EMC and RoHS documentation supplied with every unit</li>
+          <li>EU warehousing — no 12-week container wait on repeats</li>
+          <li>2-year warranty, 5 years of spare-part availability</li>
+          <li>On-site service in DACH, remote diagnostics elsewhere</li>
+        </ul>
+        <div class="tags"><span class="tag">Logistics</span><span class="tag">Compliance</span><span class="tag">Warranty</span><span class="tag">Service</span></div>
+        <div class="prod__foot">
+          <span>Included with every order</span>
+          <a href="#contact">Ask about terms</a>
+        </div>
+      </article>
+
+      <article class="prod prod--collab rise" data-d="3">
+        <div class="collab">
+          <div>
+            <div class="prod__top">
+              <span class="prod__no">06</span>
+              <span class="prod__status prod__status--soon">Open</span>
+            </div>
+            <h3>Collaboration</h3>
+            <p>If you manufacture, install or resell in the DACH region, there is a version of this that works for both of us. Three ways in, all of them written down before anyone ships anything.</p>
+            <a href="#contact" class="btn btn--light"><span>Talk about a partnership</span></a>
+          </div>
+          <div class="collab__grid">
+            <div>
+              <h4>OEM &amp; white label</h4>
+              <p>Our panels and optics under your badge, with your packaging, manual and firmware splash. Minimum run of ten units.</p>
+            </div>
+            <div>
+              <h4>Distribution</h4>
+              <p>Regional resale with protected territory, dealer pricing, demo stock and technical training for your sales team.</p>
+            </div>
+            <div>
+              <h4>Joint development</h4>
+              <p>You bring the application and the test site, we bring the engineering. Costs and rights agreed in writing up front.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -1021,6 +1234,9 @@ body.lit .measure{opacity:1}
           <button class="chip">Web build</button>
           <button class="chip">Data / AI</button>
           <button class="chip">3D / motion</button>
+          <button class="chip">Beamer / projection</button>
+          <button class="chip">LED display</button>
+          <button class="chip">Partnership</button>
           <button class="chip">Not sure yet</button>
         </div>
       </div>
@@ -1059,6 +1275,7 @@ body.lit .measure{opacity:1}
         <h5>Studio</h5>
         <ul>
           <li><a href="#what">What we do</a></li>
+          <li><a href="#products">Products</a></li>
           <li><a href="#work">Work</a></li>
           <li><a href="#process">Process</a></li>
           <li><a href="#tracks">Engagements</a></li>
@@ -1090,6 +1307,355 @@ body.lit .measure{opacity:1}
     </div>
   </div>
 </footer>
+
+<script>
+/* ============================================================
+   I18N — English (source) ⟷ German
+   Text stays in the HTML in English; German is applied at runtime.
+   No new animation is introduced by this file.
+   ============================================================ */
+window.I18N = {
+  meta: {
+    de: { title: "DDC — Design Development Corporation",
+          desc: "DDC ist ein Studio für Design und Entwicklung. Dasselbe Team vom ersten Strich bis zum letzten Deploy." },
+    en: { title: "DDC — Design Development Corporation",
+          desc: "DDC is a design and development studio. Same team from the first sketch to the last deploy." }
+  },
+
+  manifesto: {
+    en: "Most projects die in the gap between the design file and the repository. DDC removes the gap. One team scopes it, draws it, writes it, and keeps it running after launch.",
+    de: "Die meisten Projekte sterben in der Lücke zwischen Designdatei und Repository. DDC schließt die Lücke. Ein Team steckt es ab, zeichnet es, schreibt es und hält es nach dem Launch am Laufen."
+  },
+  manifestoHl: { en: /gap|removes|One|team/, de: /Lücke|schließt|Ein|Team/ },
+
+  quotes: {
+    en: [
+      {t:"They sent one team and it stayed the same team for five months. That has never happened to us before.", n:"Marit Røed", r:"Head of Operations · Halden Logistics", i:"MR"},
+      {t:"The configurator closed three deals in its first month. Our sales calls got twenty minutes shorter.", n:"Tomáš Král", r:"Sales Director · Rolling FAST", i:"TK"},
+      {t:"We had four versions of the truth. Now we have one, and the plant managers actually open it.", n:"Andrea Fuchs", r:"Head of BI · Nordhaus Werke", i:"AF"}
+    ],
+    de: [
+      {t:"Sie haben ein Team geschickt, und es blieb fünf Monate lang dasselbe Team. Das ist uns vorher noch nie passiert.", n:"Marit Røed", r:"Leiterin Betrieb · Halden Logistics", i:"MR"},
+      {t:"Der Konfigurator hat im ersten Monat drei Abschlüsse gebracht. Unsere Verkaufsgespräche sind zwanzig Minuten kürzer geworden.", n:"Tomáš Král", r:"Vertriebsleiter · Rolling FAST", i:"TK"},
+      {t:"Wir hatten vier Versionen der Wahrheit. Jetzt haben wir eine, und die Werksleiter öffnen sie tatsächlich.", n:"Andrea Fuchs", r:"Leiterin BI · Nordhaus Werke", i:"AF"}
+    ]
+  },
+
+  /* key = the English string exactly as it appears in the markup */
+  de: {
+    "What we do":"Leistungen",
+    "Products":"Produkte",
+    "Work":"Projekte",
+    "Process":"Ablauf",
+    "Engagements":"Modelle",
+    "Start a project":"Projekt starten",
+    "We design it.":"Wir gestalten es.",
+    "We build it.":"Wir bauen es.",
+    "No handoff.":"Keine Übergabe.",
+    "Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.":"Designer und Entwickler in einem Team, in einer Datei. Nichts geht beim Übergeben verloren, weil wir nie eine Wand gebaut haben.",
+    "See the work":"Projekte ansehen",
+    "Drag — design ⟷ build":"Ziehen — Design ⟷ Umsetzung",
+    "Left: the design. Right: the build. Same file.":"Links: das Design. Rechts: die Umsetzung. Dieselbe Datei.",
+    "Scroll":"Scrollen",
+    "Brand identity":"Markenidentität",
+    "Product design":"Produktdesign",
+    "Web & app builds":"Web- & App-Entwicklung",
+    "Data platforms":"Datenplattformen",
+    "AI & agents":"KI & Agenten",
+    "3D & motion":"3D & Motion",
+    "Beamer & LED supply":"Beamer- & LED-Lieferung",
+    "Why we're built this way":"Warum wir so aufgestellt sind",
+    "Small on purpose":"Klein mit Absicht",
+    "Four to six people on a project. You talk to the people doing the work, not an account layer.":"Vier bis sechs Personen pro Projekt. Sie sprechen mit den Menschen, die die Arbeit machen, nicht mit einer Kundenbetreuung.",
+    "Fixed scope, fixed price":"Fester Umfang, fester Preis",
+    "You get a written scope and a number before anyone opens an editor. Change it and we re-quote in writing.":"Sie erhalten einen schriftlichen Leistungsumfang und eine Zahl, bevor jemand einen Editor öffnet. Ändern Sie ihn, kalkulieren wir schriftlich neu.",
+    "You own everything":"Alles gehört Ihnen",
+    "Source files, repositories, infrastructure and documentation transfer to you at handover. No lock-in.":"Quelldateien, Repositories, Infrastruktur und Dokumentation gehen bei der Übergabe an Sie über. Kein Lock-in.",
+    "Five things,":"Fünf Dinge,",
+    "done properly":"richtig gemacht",
+    "We'd rather be excellent at a short list than passable at everything. Open a panel to see what's inside each one.":"Lieber auf einer kurzen Liste exzellent als überall passabel. Öffnen Sie ein Panel, um zu sehen, was darin steckt.",
+    "Brand & identity":"Marke & Identität",
+    "Naming, logotype, type system, colour, and a design system your team can actually use without calling us.":"Naming, Wortmarke, Typosystem, Farbe und ein Designsystem, das Ihr Team wirklich nutzen kann, ohne uns anzurufen.",
+    "Identity":"Identität",
+    "Design system":"Designsystem",
+    "Guidelines":"Guidelines",
+    "Print":"Print",
+    "Interface design for software people use all day. Research, flows, prototypes, and specs written so engineers don't have to guess.":"Interface-Design für Software, die man den ganzen Tag benutzt. Research, Flows, Prototypen und Spezifikationen, bei denen Entwickler nicht raten müssen.",
+    "UX research":"UX-Research",
+    "Accessibility":"Barrierefreiheit",
+    "Web & app development":"Web- & App-Entwicklung",
+    "Marketing sites, web apps, and internal tools. Typed, tested, fast on a mid-range phone, and hosted somewhere you control.":"Marketing-Websites, Web-Apps und interne Tools. Typisiert, getestet, schnell auf einem Mittelklasse-Handy und dort gehostet, wo Sie die Kontrolle haben.",
+    "Edge hosting":"Edge-Hosting",
+    "Data & AI engineering":"Data- & KI-Engineering",
+    "Pipelines, warehouses and dashboards that give one answer instead of four. Plus retrieval and agent systems that stay inside your data.":"Pipelines, Warehouses und Dashboards, die eine Antwort geben statt vier. Dazu Retrieval- und Agentensysteme, die in Ihren Daten bleiben.",
+    "Product visualisation, configurators and animation for teams selling something physical that's hard to photograph.":"Produktvisualisierung, Konfiguratoren und Animation für Teams, die etwas Physisches verkaufen, das sich schlecht fotografieren lässt.",
+    "Product film":"Produktfilm",
+    "Configurators":"Konfiguratoren",
+
+    "Products & supply":"Produkte & Lieferung",
+    "Hardware":"Hardware,",
+    "we ship":"die wir liefern",
+    "Projection and LED, sold as a working room rather than a box on a pallet. Delivered, installed, commissioned.":"Projektion und LED — verkauft als funktionierender Raum, nicht als Kiste auf einer Palette. Geliefert, installiert, in Betrieb genommen.",
+    "In stock":"Ab Lager",
+    "Beamer & projection":"Beamer & Projektion",
+    "Laser projectors, lenses and screens specified for your room, not from a catalogue page. We calculate the throw, mount it, cable it and commission it on site.":"Laserprojektoren, Objektive und Leinwände, ausgelegt auf Ihren Raum statt auf eine Katalogseite. Wir berechnen den Projektionsabstand, montieren, verkabeln und nehmen vor Ort in Betrieb.",
+    "Laser projectors, 5,000–20,000 ANSI lumens":"Laserprojektoren, 5.000–20.000 ANSI-Lumen",
+    "Short-throw and ultra-short-throw optics":"Kurzdistanz- und Ultrakurzdistanz-Optiken",
+    "Fixed-frame, motorised and rollable screens":"Rahmen-, Motor- und Rollleinwände",
+    "Mounts, signal distribution and control":"Halterungen, Signalverteilung und Steuerung",
+    "Conference":"Konferenz",
+    "Auditorium":"Auditorium",
+    "Museum":"Museum",
+    "Retail":"Handel",
+    "From €1,890 · per room":"Ab 1.890 € · pro Raum",
+    "Request a spec":"Auslegung anfragen",
+    "Made to order":"Auftragsfertigung",
+    "Rollable LED display":"Rollbares LED-Display",
+    "The Rolling series — FAST, GATE and FLOOR. The panel rolls into a flight case, goes up with two people, and carries a walk-on load where the floor version is used.":"Die Rolling-Serie — FAST, GATE und FLOOR. Das Panel rollt in einen Flightcase, steht mit zwei Personen und trägt begehbare Lasten, wo die FLOOR-Version eingesetzt wird.",
+    "Pixel pitch P2.5 – P5.9":"Pixelabstand P2.5 – P5.9",
+    "Indoor, outdoor IP65 and floor-rated builds":"Indoor, Outdoor IP65 und begehbare Ausführungen",
+    "Roll-up transport — no truss on standard spans":"Aufrollbarer Transport — kein Traversenbau bei Standardspannweiten",
+    "Spare modules and receiving cards held in stock":"Ersatzmodule und Receiving Cards ab Lager",
+    "Events":"Events",
+    "Touring":"Touring",
+    "Rental":"Vermietung",
+    "Stage":"Bühne",
+    "Quoted per m² · 4–6 weeks":"Preis pro m² · 4–6 Wochen",
+    "Get a quote":"Angebot anfordern",
+    "Pre-launch":"Vor dem Launch",
+    "New products":"Neue Produkte",
+    "What is next on the line. The first production run goes to a small group of customers who want a say in the final specification.":"Was als Nächstes vom Band läuft. Die erste Serie geht an einen kleinen Kreis von Kunden, die bei der finalen Spezifikation mitreden wollen.",
+    "Transparent LED mesh for glass façades":"Transparentes LED-Mesh für Glasfassaden",
+    "Battery-backed mobile LED trolley":"Mobiler LED-Trolley mit Akkupuffer",
+    "All-in-one meeting-room projection bar":"All-in-one-Projektionsleiste für Besprechungsräume",
+    "Limited run":"Kleinserie",
+    "Pilot pricing":"Pilotpreise",
+    "Early-access list open":"Early-Access-Liste offen",
+    "Join the list":"Auf die Liste",
+    "In research":"In der Forschung",
+    "Research products":"Forschungsprodukte",
+    "Work that is not a product yet. We prototype with partners who have a real installation to test in, and we publish what we learn rather than sitting on it.":"Arbeit, die noch kein Produkt ist. Wir bauen Prototypen mit Partnern, die eine echte Installation zum Testen haben, und veröffentlichen, was wir lernen, statt darauf zu sitzen.",
+    "Micro-LED below 1 mm pitch — thermal behaviour and yield":"Micro-LED unter 1 mm Pitch — Wärmeverhalten und Ausbeute",
+    "Content scaler that fits any source to any wall geometry":"Content-Scaler, der jede Quelle an jede Wandgeometrie anpasst",
+    "Sensor-driven brightness and power-draw modelling":"Sensorgesteuerte Helligkeits- und Verbrauchsmodellierung",
+    "Serviceability: field-replaceable modules without a hot-melt rig":"Servicefreundlichkeit: Module im Feld tauschbar, ohne Heißklebe-Rig",
+    "Prototype":"Prototyp",
+    "Test site wanted":"Teststandort gesucht",
+    "Open notes":"Offene Notizen",
+    "Co-funded pilots · shared IP terms":"Ko-finanzierte Pilotprojekte · geteilte IP-Rechte",
+    "Read the notes":"Notizen lesen",
+    "Supply chain":"Lieferkette",
+    "Sourcing & service":"Beschaffung & Service",
+    "Everything around the panel, because that is where projects usually stall. One contract for the hardware, the freight, the paperwork and the years after handover.":"Alles rund um das Panel, denn genau daran scheitern Projekte meistens. Ein Vertrag für Hardware, Fracht, Papiere und die Jahre nach der Übergabe.",
+    "CE, EMC and RoHS documentation supplied with every unit":"CE-, EMV- und RoHS-Unterlagen zu jeder Einheit",
+    "EU warehousing — no 12-week container wait on repeats":"EU-Lager — keine 12 Wochen Containerwartezeit bei Nachbestellungen",
+    "2-year warranty, 5 years of spare-part availability":"2 Jahre Garantie, 5 Jahre Ersatzteilverfügbarkeit",
+    "On-site service in DACH, remote diagnostics elsewhere":"Vor-Ort-Service in der DACH-Region, Ferndiagnose darüber hinaus",
+    "Logistics":"Logistik",
+    "Warranty":"Garantie",
+    "Included with every order":"In jeder Bestellung enthalten",
+    "Ask about terms":"Konditionen anfragen",
+    "Open":"Offen",
+    "Collaboration":"Kooperation",
+    "If you manufacture, install or resell in the DACH region, there is a version of this that works for both of us. Three ways in, all of them written down before anyone ships anything.":"Wenn Sie in der DACH-Region fertigen, installieren oder wiederverkaufen, gibt es eine Variante, die für beide Seiten funktioniert. Drei Wege hinein, alle schriftlich fixiert, bevor irgendetwas verschickt wird.",
+    "Talk about a partnership":"Über eine Partnerschaft sprechen",
+    "OEM & white label":"OEM & White Label",
+    "Our panels and optics under your badge, with your packaging, manual and firmware splash. Minimum run of ten units.":"Unsere Panels und Optiken unter Ihrer Marke, mit Ihrer Verpackung, Anleitung und Firmware-Splash. Mindestserie zehn Einheiten.",
+    "Distribution":"Vertrieb",
+    "Regional resale with protected territory, dealer pricing, demo stock and technical training for your sales team.":"Regionaler Wiederverkauf mit geschütztem Gebiet, Händlerpreisen, Demobestand und technischer Schulung für Ihr Vertriebsteam.",
+    "Joint development":"Gemeinsame Entwicklung",
+    "You bring the application and the test site, we bring the engineering. Costs and rights agreed in writing up front.":"Sie bringen die Anwendung und den Teststandort, wir bringen das Engineering. Kosten und Rechte werden vorab schriftlich geregelt.",
+
+    "Selected work":"Ausgewählte Projekte",
+    "Recent":"Aktuelle",
+    "builds":"Projekte",
+    "A few projects that show the range. Full case studies on request.":"Ein paar Projekte, die die Bandbreite zeigen. Ausführliche Case Studies auf Anfrage.",
+    "A control room for 1,400 vehicles. We replaced nine spreadsheets and a whiteboard with one live dispatch view.":"Ein Leitstand für 1.400 Fahrzeuge. Wir haben neun Tabellen und ein Whiteboard durch eine Live-Disposition ersetzt.",
+    "Web app":"Web-App",
+    "Data":"Daten",
+    "A browser configurator for rollable LED displays. Buyers size a wall, see it in 3D, and leave with a priced spec sheet.":"Ein Browser-Konfigurator für rollbare LED-Displays. Käufer legen die Wandgröße fest, sehen sie in 3D und gehen mit einem bepreisten Datenblatt.",
+    "Shop-floor reporting for a kitchen manufacturer. Machine data to a plant-manager dashboard in under four minutes.":"Shopfloor-Reporting für einen Küchenhersteller. Von Maschinendaten zum Werksleiter-Dashboard in unter vier Minuten.",
+    "Data platform":"Datenplattform",
+    "Intake for 40,000 scanned records a month. A retrieval pipeline that reads them, files them, and flags what a human should check.":"Eingang von 40.000 gescannten Akten pro Monat. Eine Retrieval-Pipeline liest sie, legt sie ab und markiert, was ein Mensch prüfen sollte.",
+    "AI":"KI",
+
+    "How a project runs":"Wie ein Projekt läuft",
+    "Four stages,":"Vier Phasen,",
+    "in this order":"in dieser Reihenfolge",
+    "Scope":"Scoping",
+    "We interview whoever owns the problem, audit what exists, and write the scope. You get a fixed price and a date.":"Wir sprechen mit denen, denen das Problem gehört, prüfen den Bestand und schreiben den Umfang auf. Sie bekommen einen Festpreis und ein Datum.",
+    "1–2 weeks":"1–2 Wochen",
+    "Direction first, then screens. You see real content in the design, never lorem ipsum, and you review every week.":"Erst die Richtung, dann die Screens. Sie sehen echte Inhalte im Design, nie Lorem Ipsum, und prüfen jede Woche.",
+    "2–5 weeks":"2–5 Wochen",
+    "Build":"Umsetzung",
+    "The same team writes the code. You get a staging link from week one and watch it fill in, so nothing is a surprise.":"Dasselbe Team schreibt den Code. Ab Woche eins gibt es einen Staging-Link, den Sie mitwachsen sehen — nichts ist eine Überraschung.",
+    "4–12 weeks":"4–12 Wochen",
+    "Run":"Betrieb",
+    "Launch, then 30 days of fixes included. After that you take it in-house or we stay on a retainer. Your call.":"Launch, danach 30 Tage Fehlerbehebung inklusive. Anschließend übernehmen Sie intern oder wir bleiben im Retainer. Ihre Entscheidung.",
+    "Ongoing":"Laufend",
+
+    "Projects shipped since 2019":"Projekte seit 2019 ausgeliefert",
+    "Industries, from logistics to healthcare":"Branchen, von Logistik bis Gesundheitswesen",
+    "Weeks, median scope to launch":"Wochen, im Median von Scoping bis Launch",
+    "Built in-house, never subcontracted":"Im Haus gebaut, nie fremdvergeben",
+
+    "Ways to work with us":"Wie Sie mit uns arbeiten",
+    "Pick the size":"Wählen Sie die Größe",
+    "of the problem":"des Problems",
+    "Two focused weeks on one question: a rebrand direction, a prototype, an audit of what you already have.":"Zwei fokussierte Wochen für eine Frage: eine Marken-Richtung, ein Prototyp, ein Audit dessen, was Sie schon haben.",
+    "Kickoff, two reviews, one handover":"Kickoff, zwei Reviews, eine Übergabe",
+    "Figma files and a written recommendation":"Figma-Dateien und eine schriftliche Empfehlung",
+    "No commitment past the two weeks":"Keine Verpflichtung über die zwei Wochen hinaus",
+    "From €3,200 · fixed":"Ab 3.200 € · Festpreis",
+    "Track B · most chosen":"Track B · am häufigsten gewählt",
+    "The full run. Scope, design, build, launch — one team, one price, one date.":"Der volle Durchlauf. Scoping, Design, Umsetzung, Launch — ein Team, ein Preis, ein Termin.",
+    "Weekly reviews on a live staging link":"Wöchentliche Reviews an einem Live-Staging-Link",
+    "Design system, source code, and docs":"Designsystem, Quellcode und Dokumentation",
+    "30 days of post-launch fixes included":"30 Tage Fehlerbehebung nach dem Launch inklusive",
+    "From €12,000 · fixed scope":"Ab 12.000 € · fester Umfang",
+    "A standing slice of our week for teams shipping continuously. Design and engineering on tap.":"Ein fester Anteil unserer Woche für Teams, die laufend ausliefern. Design und Engineering auf Abruf.",
+    "Reserved days each month, rolled over if unused":"Reservierte Tage pro Monat, übertragbar wenn ungenutzt",
+    "Shared board, same-day answers":"Gemeinsames Board, Antworten am selben Tag",
+    "Monthly, cancel with 30 days' notice":"Monatlich, kündbar mit 30 Tagen Frist",
+    "From €2,400 / month":"Ab 2.400 € / Monat",
+
+    "Questions":"Fragen",
+    "Before":"Bevor Sie",
+    "you write":"schreiben",
+    "If yours isn't here, ask it in the form below. We answer within one working day.":"Wenn Ihre nicht dabei ist, stellen Sie sie im Formular unten. Wir antworten innerhalb eines Werktags.",
+    "What does a project cost?":"Was kostet ein Projekt?",
+    "Most full builds land between €12,000 and €60,000 depending on scope. We quote a fixed price after the scoping stage, so you're never approving an open-ended hourly bill. Smaller sprints start at €3,200.":"Die meisten kompletten Projekte liegen je nach Umfang zwischen 12.000 € und 60.000 €. Wir nennen nach dem Scoping einen Festpreis, damit Sie nie eine offene Stundenrechnung freigeben. Kleinere Sprints starten bei 3.200 €.",
+    "How fast can you start?":"Wie schnell können Sie starten?",
+    "Scoping usually starts within two weeks of signing. Build slots are booked four to six weeks out. If you have a hard deadline, say so in your first message and we'll tell you straight away whether it's possible.":"Das Scoping startet meist innerhalb von zwei Wochen nach Vertragsschluss. Umsetzungsslots sind vier bis sechs Wochen im Voraus belegt. Wenn Sie einen harten Termin haben, schreiben Sie ihn in die erste Nachricht — wir sagen sofort, ob er machbar ist.",
+    "Do you work with our in-house team?":"Arbeiten Sie mit unserem internen Team?",
+    "Often. We can take a whole project, or drop into your repository and board and work alongside your developers. We'll match your stack, your review process, and your definition of done.":"Oft. Wir übernehmen ein ganzes Projekt oder steigen in Ihr Repository und Board ein und arbeiten neben Ihren Entwicklern. Wir passen uns Ihrem Stack, Ihrem Review-Prozess und Ihrer Definition of Done an.",
+    "Who owns the code and design files?":"Wem gehören Code und Designdateien?",
+    "You do, from the first commit. Repositories, design files, domains and hosting accounts are in your name and transfer at handover with documentation. We don't hold anything hostage.":"Ihnen, ab dem ersten Commit. Repositories, Designdateien, Domains und Hosting-Konten laufen auf Ihren Namen und gehen bei der Übergabe mit Dokumentation über. Wir halten nichts zurück.",
+    "Is everything GDPR-compliant?":"Ist alles DSGVO-konform?",
+    "Yes. We build with EU hosting by default, write the Impressum and privacy notice with you, and keep a processing agreement on file. For AI features we can run models on infrastructure you control so nothing leaves your environment.":"Ja. Wir bauen standardmäßig mit EU-Hosting, schreiben Impressum und Datenschutzerklärung gemeinsam mit Ihnen und führen einen Auftragsverarbeitungsvertrag. Für KI-Funktionen können wir Modelle auf Ihrer eigenen Infrastruktur betreiben, sodass nichts Ihre Umgebung verlässt.",
+    "What happens after launch?":"Was passiert nach dem Launch?",
+    "Thirty days of fixes are included in every build. After that you either take it in-house — we run a handover session and leave written docs — or move onto the Partner track for ongoing work.":"Dreißig Tage Fehlerbehebung sind in jedem Projekt enthalten. Danach übernehmen Sie entweder intern — wir machen eine Übergabesession und hinterlassen schriftliche Doku — oder wechseln für laufende Arbeit auf den Partner-Track.",
+
+    "Tell us":"Sagen Sie uns,",
+    "what's broken":"was klemmt",
+    "A paragraph is enough to start. If it's not a fit we'll say so quickly and point you somewhere better.":"Ein Absatz reicht für den Anfang. Wenn es nicht passt, sagen wir das schnell und verweisen Sie an eine bessere Adresse.",
+    "Book a 20-minute call":"20-Minuten-Termin buchen",
+    "Your name":"Ihr Name",
+    "Company":"Unternehmen",
+    "Email":"E-Mail",
+    "What do you need?":"Was brauchen Sie?",
+    "Brand":"Marke",
+    "Web build":"Web-Projekt",
+    "Data / AI":"Daten / KI",
+    "3D / motion":"3D / Motion",
+    "Beamer / projection":"Beamer / Projektion",
+    "LED display":"LED-Display",
+    "Partnership":"Partnerschaft",
+    "Not sure yet":"Noch unklar",
+    "Budget range":"Budgetrahmen",
+    "Under €10k":"Unter 10.000 €",
+    "€10–30k":"10.000–30.000 €",
+    "€30–60k":"30.000–60.000 €",
+    "€60k+":"Über 60.000 €",
+    "What's the project?":"Worum geht es?",
+    "Send it":"Absenden",
+    "We reply within one working day. Your details stay with us and are never sold or shared.":"Wir antworten innerhalb eines Werktags. Ihre Daten bleiben bei uns und werden nie verkauft oder weitergegeben.",
+    "Message ready":"Nachricht bereit",
+    "This is a demo form — connect it to your inbox or form service and it'll send for real.":"Dies ist ein Demo-Formular — verbinden Sie es mit Ihrem Postfach oder Formulardienst, dann wird wirklich gesendet.",
+
+    "A design and development studio. Same team from the first sketch to the last deploy.":"Ein Studio für Design und Entwicklung. Dasselbe Team vom ersten Strich bis zum letzten Deploy.",
+    "Contact":"Kontakt",
+    "Careers":"Karriere",
+    "Legal":"Rechtliches",
+    "Terms":"AGB",
+    "Cookie settings":"Cookie-Einstellungen",
+    "Back to top ↑":"Nach oben ↑",
+    "Back to top":"Nach oben",
+
+    /* attributes */
+    "DDC home":"DDC Startseite",
+    "Open menu":"Menü öffnen",
+    "Drag to compare the design and the build":"Ziehen, um Design und Umsetzung zu vergleichen",
+    "Testimonial 1":"Stimme 1",
+    "Testimonial 2":"Stimme 2",
+    "Testimonial 3":"Stimme 3",
+    "Language":"Sprache",
+    "Jane Bauer":"Max Mustermann",
+    "Where you work":"Wo Sie arbeiten",
+    "you@company.com":"sie@unternehmen.de",
+    "What exists today, what should exist instead, and when you need it.":"Was heute existiert, was stattdessen existieren sollte und bis wann."
+  }
+};
+
+/* ---------- runtime ---------- */
+(function(){
+  "use strict";
+  var DICT = window.I18N.de;
+  var ATTRS = ["placeholder","aria-label","title","alt"];
+  var SKIP_TAGS = {SCRIPT:1,STYLE:1,NOSCRIPT:1};
+  var SKIP_SEL = "#manifesto, #quote";     /* handled separately */
+  var texts = [], attrs = [], lang = "en";
+
+  function norm(s){ return s.replace(/\s+/g," ").trim(); }
+
+  function collect(){
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n){
+        var p = n.parentElement;
+        if (!p || SKIP_TAGS[p.tagName]) return NodeFilter.FILTER_REJECT;
+        if (p.closest(SKIP_SEL)) return NodeFilter.FILTER_REJECT;
+        return norm(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var n;
+    while ((n = w.nextNode())) texts.push({ node:n, en:n.nodeValue, key:norm(n.nodeValue) });
+
+    ATTRS.forEach(function(a){
+      document.querySelectorAll("["+a+"]").forEach(function(el){
+        var v = el.getAttribute(a);
+        if (norm(v)) attrs.push({ el:el, a:a, en:v, key:norm(v) });
+      });
+    });
+  }
+
+  function apply(to){
+    texts.forEach(function(t){
+      t.node.nodeValue = (to === "de" && DICT[t.key]) ? DICT[t.key] : t.en;
+    });
+    attrs.forEach(function(t){
+      t.el.setAttribute(t.a, (to === "de" && DICT[t.key]) ? DICT[t.key] : t.en);
+    });
+    var m = window.I18N.meta[to];
+    document.title = m.title;
+    var d = document.querySelector('meta[name="description"]');
+    if (d) d.setAttribute("content", m.desc);
+    document.documentElement.lang = to;
+    if (window.__rebuildManifesto) window.__rebuildManifesto();
+    if (window.__refreshQuote) window.__refreshQuote();
+    document.querySelectorAll("#lang .lang__b").forEach(function(b){
+      var on = b.getAttribute("data-lang") === to;
+      b.classList.toggle("is-on", on);
+      b.setAttribute("aria-pressed", String(on));
+    });
+    lang = to;
+    try { localStorage.setItem("ddc-lang", to); } catch(e){}
+  }
+
+  function boot(){
+    collect();
+    var saved = null;
+    try { saved = localStorage.getItem("ddc-lang"); } catch(e){}
+    if (!saved && (navigator.language || "").toLowerCase().indexOf("de") === 0) saved = "de";
+    document.querySelectorAll("#lang .lang__b").forEach(function(b){
+      b.addEventListener("click", function(){ apply(b.getAttribute("data-lang")); });
+    });
+    if (saved === "de") apply("de");
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
 
 <script>
 (function(){
@@ -1183,18 +1749,26 @@ body.lit .measure{opacity:1}
   /* ---------- 4. Manifesto word-by-word ---------- */
   var man = document.querySelector("#manifesto [data-split]");
   if (man){
-    var words = man.textContent.trim().split(/\s+/);
-    man.innerHTML = words.map(function(w){
-      var hl = /gap|removes|One|team/.test(w) ? " hl" : "";
-      return '<span class="w'+hl+'">'+w+'</span>';
-    }).join(" ");
-    var spans = man.querySelectorAll(".w");
-    var mio = new IntersectionObserver(function(en){
-      if (!en[0].isIntersecting) return;
-      spans.forEach(function(s,i){ setTimeout(function(){ s.classList.add("on"); }, reduce ? 0 : i*26); });
-      mio.disconnect();
-    }, {threshold:0.35});
-    mio.observe(man);
+    var mio = null;
+    window.__rebuildManifesto = function(){
+      var L  = document.documentElement.lang === "de" ? "de" : "en";
+      var src = (window.I18N && window.I18N.manifesto) ? window.I18N.manifesto[L] : man.textContent;
+      var hl  = (window.I18N && window.I18N.manifestoHl) ? window.I18N.manifestoHl[L] : /gap|removes|One|team/;
+      var lit = man.querySelector(".w.on") !== null;
+      man.innerHTML = src.trim().split(/\s+/).map(function(w){
+        return '<span class="w'+(hl.test(w)?" hl":"")+(lit?" on":"")+'">'+w+'</span>';
+      }).join(" ");
+      if (mio) mio.disconnect();
+      if (lit) return;
+      var spans = man.querySelectorAll(".w");
+      mio = new IntersectionObserver(function(en){
+        if (!en[0].isIntersecting) return;
+        spans.forEach(function(s,i){ setTimeout(function(){ s.classList.add("on"); }, reduce ? 0 : i*26); });
+        mio.disconnect();
+      }, {threshold:0.35});
+      mio.observe(man);
+    };
+    window.__rebuildManifesto();
   }
 
   /* ---------- 5. Capability panels ---------- */
@@ -1225,16 +1799,20 @@ body.lit .measure{opacity:1}
   });
 
   /* ---------- 7. Testimonials ---------- */
-  var quotes = [
+  var quotesEN = [
     {t:"They sent one team and it stayed the same team for five months. That has never happened to us before.", n:"Marit Røed", r:"Head of Operations · Halden Logistics", i:"MR"},
     {t:"The configurator closed three deals in its first month. Our sales calls got twenty minutes shorter.", n:"Tomáš Král", r:"Sales Director · Rolling FAST", i:"TK"},
     {t:"We had four versions of the truth. Now we have one, and the plant managers actually open it.", n:"Andrea Fuchs", r:"Head of BI · Nordhaus Werke", i:"AF"}
   ];
+  function quoteSet(){
+    var L = document.documentElement.lang === "de" ? "de" : "en";
+    return (window.I18N && window.I18N.quotes && window.I18N.quotes[L]) || quotesEN;
+  }
   var qi = 0, qT = document.getElementById("qText"), qN = document.getElementById("qName"),
       qR = document.getElementById("qRole"), qIni = document.getElementById("qIni"),
       dots = document.querySelectorAll("#qNav .qdot");
   function showQuote(i){
-    qi = i; var q = quotes[i];
+    qi = i; var q = quoteSet()[i];
     var b = qT.closest("blockquote");
     b.style.transition = "opacity .3s"; b.style.opacity = "0";
     setTimeout(function(){
@@ -1244,7 +1822,11 @@ body.lit .measure{opacity:1}
     dots.forEach(function(d,j){ d.classList.toggle("on", j === i); });
   }
   dots.forEach(function(d,j){ d.addEventListener("click", function(){ showQuote(j); clearInterval(auto); }); });
-  var auto = setInterval(function(){ showQuote((qi+1) % quotes.length); }, 7000);
+  var auto = setInterval(function(){ showQuote((qi+1) % quoteSet().length); }, 7000);
+  window.__refreshQuote = function(){
+    var q = quoteSet()[qi];
+    qT.textContent = q.t; qN.textContent = q.n; qR.textContent = q.r; qIni.textContent = q.i;
+  };
 
   /* ---------- 8. FAQ accordion ---------- */
   document.querySelectorAll(".acc__item").forEach(function(item){
