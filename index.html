@@ -168,7 +168,10 @@ body.menu-open .nav__burger i:nth-child(2){transform:translateY(-4px) rotate(-45
   background-image:linear-gradient(to bottom,rgba(10,11,18,.055) 1px,transparent 1px);
   background-size:100% 34px;
 }
-.h-title{font-size:clamp(46px,10.2vw,152px);max-width:14ch}
+/* hero title — 20% smaller than the original scale so long lines
+   (especially German) stay inside the stage */
+.h-title{font-size:clamp(37px,8.2vw,122px);max-width:14ch}
+html[lang="de"] .h-title{font-size:clamp(34px,7.4vw,112px);max-width:min(18ch,100%)}
 .h-title .l{display:block;overflow:hidden}
 .h-title .l i{display:block;font-style:normal;transform:translateY(105%);
   transition:transform 1.05s var(--ease)}
@@ -340,39 +343,6 @@ body.lit .measure{opacity:1}
   padding:5px 9px;border:1px solid rgba(239,238,233,.32);color:rgba(239,238,233,.85)}
 
 /* ============================================================
-   WORK
-   ============================================================ */
-.work__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
-  flex-wrap:wrap;margin-bottom:clamp(30px,4vw,50px)}
-.work__head h2{font-size:clamp(34px,5.4vw,74px)}
-.cases{border-top:1px solid rgba(10,11,18,.18)}
-.case{
-  display:grid;grid-template-columns:70px 1fr auto;gap:clamp(14px,3vw,44px);
-  align-items:center;padding:clamp(22px,2.6vw,32px) 0;
-  border-bottom:1px solid rgba(10,11,18,.18);position:relative;isolation:isolate;
-  transition:padding-inline .5s var(--ease),color .4s var(--ease);
-}
-.case::before{
-  content:"";position:absolute;inset:0;background:var(--klein);z-index:-1;
-  transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease);
-}
-.case:hover{padding-inline:clamp(12px,2vw,28px);color:var(--oyster)}
-.case:hover::before{transform:scaleY(1);transform-origin:top}
-.case__yr{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--spec)}
-.case:hover .case__yr{color:rgba(239,238,233,.7)}
-.case__name{font-family:var(--f-display);font-variation-settings:"wdth" 108,"wght" 800;
-  text-transform:uppercase;font-size:clamp(21px,3.2vw,44px);line-height:1;letter-spacing:-.02em;margin:0}
-.case__desc{margin:9px 0 0;font-size:15.5px;color:#41445A;max-width:52ch}
-.case:hover .case__desc{color:rgba(239,238,233,.78)}
-.case__meta{display:flex;align-items:center;gap:18px}
-.case__disc{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:230px}
-.case__arrow{width:42px;height:42px;border:1px solid rgba(10,11,18,.25);
-  display:grid;place-items:center;flex:none;transition:transform .45s var(--ease),border-color .4s}
-.case:hover .case__arrow{transform:rotate(45deg);border-color:rgba(239,238,233,.5)}
-.case .tag{border-color:rgba(10,11,18,.22);color:#41445A}
-.case:hover .tag{border-color:rgba(239,238,233,.4);color:rgba(239,238,233,.9)}
-
-/* ============================================================
    PRODUCTS  (static — no new motion, same tokens)
    ============================================================ */
 .prods__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
@@ -521,6 +491,7 @@ body.lit .measure{opacity:1}
 .contact .eyebrow{color:var(--oyster)}
 .contact__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,5vw,86px);align-items:start}
 .contact h2{font-size:clamp(38px,6.4vw,92px);color:var(--oyster)}
+html[lang="de"] .contact h2{font-size:clamp(32px,4.8vw,68px)}
 .contact__side p{color:rgba(239,238,233,.78);max-width:36ch}
 .contact__direct{margin-top:44px;display:grid;gap:20px}
 .contact__direct a{font-family:var(--f-display);font-variation-settings:"wdth" 92,"wght" 600;
@@ -611,9 +582,6 @@ body.lit .measure{opacity:1}
     font-variation-settings:"wdth" 112,"wght" 900;font-size:22px}
   .panel__no{position:static;margin-bottom:8px;display:block}
   .panel{justify-content:flex-start}
-  .case{grid-template-columns:1fr;gap:12px}
-  .case__meta{justify-content:space-between}
-  .case__disc{justify-content:flex-start;max-width:none}
   .contact__grid{grid-template-columns:1fr}
   .collab__grid{grid-template-columns:1fr}
   .man-foot{gap:26px}
@@ -650,7 +618,6 @@ body.lit .measure{opacity:1}
   <nav class="nav__links" id="navLinks">
     <a href="#what">What we do</a>
     <a href="#products">Products</a>
-    <a href="#work">Work</a>
     <a href="#process">Process</a>
     <a href="#tracks">Engagements</a>
     <a href="#faq">FAQ</a>
@@ -680,7 +647,7 @@ body.lit .measure{opacity:1}
         <p class="h-sub">Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.</p>
         <div class="h-cta">
           <a href="#contact" class="btn"><span>Start a project</span></a>
-          <a href="#work" class="btn btn--ghost"><span>See the work</span></a>
+          <a href="#products" class="btn btn--ghost"><span>See the products</span></a>
         </div>
       </div>
       <span class="anno anno--a">h1 · archivo 900 · wdth 125</span>
@@ -701,7 +668,7 @@ body.lit .measure{opacity:1}
         <p class="h-sub">Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.</p>
         <div class="h-cta">
           <span class="btn"><span>Start a project</span></span>
-          <span class="btn btn--ghost"><span>See the work</span></span>
+          <span class="btn btn--ghost"><span>See the products</span></span>
         </div>
       </div>
     </div>
@@ -975,69 +942,6 @@ body.lit .measure{opacity:1}
   </div>
 </section>
 
-<!-- ========================= WORK ========================= -->
-<section class="band" id="work">
-  <div class="wrap">
-    <div class="work__head">
-      <div>
-        <p class="eyebrow rise" style="margin-bottom:20px">Selected work</p>
-        <h2 class="display rise" data-d="1">Recent<br>builds</h2>
-      </div>
-      <p class="lede rise" data-d="2" style="font-size:17px">A few projects that show the range. Full case studies on request.</p>
-    </div>
-
-    <div class="cases">
-      <a class="case rise" href="#contact">
-        <span class="case__yr">2026</span>
-        <div>
-          <h3 class="case__name">Halden Logistics</h3>
-          <p class="case__desc">A control room for 1,400 vehicles. We replaced nine spreadsheets and a whiteboard with one live dispatch view.</p>
-        </div>
-        <div class="case__meta">
-          <div class="case__disc"><span class="tag">Product design</span><span class="tag">Web app</span><span class="tag">Data</span></div>
-          <span class="case__arrow" aria-hidden="true">↗</span>
-        </div>
-      </a>
-
-      <a class="case rise" data-d="1" href="#contact">
-        <span class="case__yr">2026</span>
-        <div>
-          <h3 class="case__name">Rolling FAST</h3>
-          <p class="case__desc">A browser configurator for rollable LED displays. Buyers size a wall, see it in 3D, and leave with a priced spec sheet.</p>
-        </div>
-        <div class="case__meta">
-          <div class="case__disc"><span class="tag">3D</span><span class="tag">Three.js</span><span class="tag">B2B</span></div>
-          <span class="case__arrow" aria-hidden="true">↗</span>
-        </div>
-      </a>
-
-      <a class="case rise" data-d="2" href="#contact">
-        <span class="case__yr">2025</span>
-        <div>
-          <h3 class="case__name">Nordhaus Werke</h3>
-          <p class="case__desc">Shop-floor reporting for a kitchen manufacturer. Machine data to a plant-manager dashboard in under four minutes.</p>
-        </div>
-        <div class="case__meta">
-          <div class="case__disc"><span class="tag">Data platform</span><span class="tag">Power BI</span></div>
-          <span class="case__arrow" aria-hidden="true">↗</span>
-        </div>
-      </a>
-
-      <a class="case rise" data-d="3" href="#contact">
-        <span class="case__yr">2025</span>
-        <div>
-          <h3 class="case__name">Kestrel Health</h3>
-          <p class="case__desc">Intake for 40,000 scanned records a month. A retrieval pipeline that reads them, files them, and flags what a human should check.</p>
-        </div>
-        <div class="case__meta">
-          <div class="case__disc"><span class="tag">AI</span><span class="tag">Pipelines</span><span class="tag">Compliance</span></div>
-          <span class="case__arrow" aria-hidden="true">↗</span>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ========================= PROCESS ========================= -->
 <section class="band process" id="process">
   <div class="wrap">
@@ -1209,7 +1113,7 @@ body.lit .measure{opacity:1}
       <div class="contact__direct rise" data-d="3">
         <a href="mailto:studio@ddc.example">studio@ddc.example <span>→</span></a>
         <a href="tel:+49000000000">+49 (0) 00 000 000 <span>→</span></a>
-        <a href="#work">Book a 20-minute call <span>→</span></a>
+        <a href="mailto:studio@ddc.example?subject=Call">Book a 20-minute call <span>→</span></a>
       </div>
     </div>
 
@@ -1276,7 +1180,6 @@ body.lit .measure{opacity:1}
         <ul>
           <li><a href="#what">What we do</a></li>
           <li><a href="#products">Products</a></li>
-          <li><a href="#work">Work</a></li>
           <li><a href="#process">Process</a></li>
           <li><a href="#tracks">Engagements</a></li>
         </ul>
@@ -1345,7 +1248,6 @@ window.I18N = {
   de: {
     "What we do":"Leistungen",
     "Products":"Produkte",
-    "Work":"Projekte",
     "Process":"Ablauf",
     "Engagements":"Modelle",
     "Start a project":"Projekt starten",
@@ -1353,7 +1255,7 @@ window.I18N = {
     "We build it.":"Wir bauen es.",
     "No handoff.":"Keine Übergabe.",
     "Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.":"Designer und Entwickler in einem Team, in einer Datei. Nichts geht beim Übergeben verloren, weil wir nie eine Wand gebaut haben.",
-    "See the work":"Projekte ansehen",
+    "See the products":"Produkte ansehen",
     "Drag — design ⟷ build":"Ziehen — Design ⟷ Umsetzung",
     "Left: the design. Right: the build. Same file.":"Links: das Design. Rechts: die Umsetzung. Dieselbe Datei.",
     "Scroll":"Scrollen",
@@ -1466,17 +1368,7 @@ window.I18N = {
     "Joint development":"Gemeinsame Entwicklung",
     "You bring the application and the test site, we bring the engineering. Costs and rights agreed in writing up front.":"Sie bringen die Anwendung und den Teststandort, wir bringen das Engineering. Kosten und Rechte werden vorab schriftlich geregelt.",
 
-    "Selected work":"Ausgewählte Projekte",
-    "Recent":"Aktuelle",
-    "builds":"Projekte",
-    "A few projects that show the range. Full case studies on request.":"Ein paar Projekte, die die Bandbreite zeigen. Ausführliche Case Studies auf Anfrage.",
-    "A control room for 1,400 vehicles. We replaced nine spreadsheets and a whiteboard with one live dispatch view.":"Ein Leitstand für 1.400 Fahrzeuge. Wir haben neun Tabellen und ein Whiteboard durch eine Live-Disposition ersetzt.",
-    "Web app":"Web-App",
     "Data":"Daten",
-    "A browser configurator for rollable LED displays. Buyers size a wall, see it in 3D, and leave with a priced spec sheet.":"Ein Browser-Konfigurator für rollbare LED-Displays. Käufer legen die Wandgröße fest, sehen sie in 3D und gehen mit einem bepreisten Datenblatt.",
-    "Shop-floor reporting for a kitchen manufacturer. Machine data to a plant-manager dashboard in under four minutes.":"Shopfloor-Reporting für einen Küchenhersteller. Von Maschinendaten zum Werksleiter-Dashboard in unter vier Minuten.",
-    "Data platform":"Datenplattform",
-    "Intake for 40,000 scanned records a month. A retrieval pipeline that reads them, files them, and flags what a human should check.":"Eingang von 40.000 gescannten Akten pro Monat. Eine Retrieval-Pipeline liest sie, legt sie ab und markiert, was ein Mensch prüfen sollte.",
     "AI":"KI",
 
     "How a project runs":"Wie ein Projekt läuft",
