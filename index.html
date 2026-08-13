@@ -1,1760 +1,1043 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DDC — Design Development Corporation</title>
-<meta name="description" content="DDC is a design and development studio. Same team from the first sketch to the last deploy.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDC Produktentwicklung</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:opsz,wght@6..72,300..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   DDC — tokens
-   ============================================================ */
-:root{
-  --klein:#1D2BE0;
-  --klein-deep:#0F1495;
-  --klein-dark:#080C4A;
-  --oyster:#EFEEE9;
-  --oyster-2:#E4E3DC;
-  --ink:#0A0B12;
-  --signal:#FF5A3C;
-  --spec:#7E84A3;
-
-  --seam:52%;
-
-  --f-display:"Archivo",system-ui,sans-serif;
-  --f-body:"Newsreader",Georgia,serif;
-  --f-mono:"JetBrains Mono",ui-monospace,monospace;
-
-  --pad:clamp(20px,5vw,72px);
-  --rail:1440px;
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-
-*,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;background:var(--oyster);color:var(--ink);
-  font-family:var(--f-body);font-size:clamp(16px,1.05vw,18.5px);
-  line-height:1.6;overflow-x:hidden;
-  font-variant-ligatures:common-ligatures;
-  -webkit-font-smoothing:antialiased;
-}
-img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-::selection{background:var(--signal);color:var(--oyster)}
-:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
-
-/* ---------- shared type roles ---------- */
-.display{
-  font-family:var(--f-display);font-weight:900;
-  font-variation-settings:"wdth" 125,"wght" 900;
-  line-height:.86;letter-spacing:-.03em;text-transform:uppercase;
-  margin:0;
-}
-.spec{
-  font-family:var(--f-mono);font-size:11px;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--spec);
-  line-height:1.4;
-}
-.eyebrow{
-  font-family:var(--f-mono);font-size:11px;font-weight:700;
-  letter-spacing:.2em;text-transform:uppercase;
-  display:flex;align-items:center;gap:10px;color:var(--klein);
-}
-.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;flex:none}
-.lede{
-  font-size:clamp(19px,1.7vw,25px);line-height:1.45;font-weight:400;
-  max-width:44ch;color:#22242F;
-}
-.wrap{max-width:var(--rail);margin-inline:auto;padding-inline:var(--pad)}
-.band{padding-block:clamp(80px,10vw,150px)}
-
-/* ============================================================
-   NAV
-   ============================================================ */
-.nav{
-  position:fixed;inset:0 0 auto 0;z-index:90;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:24px;padding:16px var(--pad);
-  transition:background .45s var(--ease),backdrop-filter .45s var(--ease),padding .45s var(--ease);
-}
-.nav.is-stuck{
-  background:color-mix(in srgb,var(--oyster) 86%,transparent);
-  backdrop-filter:blur(14px) saturate(1.4);padding-block:10px;
-  box-shadow:0 1px 0 rgba(10,11,18,.1);
-}
-.mark{display:flex;align-items:center;gap:10px}
-.mark__tile{
-  width:34px;height:34px;background:var(--klein);color:var(--oyster);
-  display:grid;place-items:center;font-family:var(--f-mono);
-  font-weight:700;font-size:12px;letter-spacing:.02em;flex:none;
-  transition:transform .5s var(--ease);
-}
-.mark:hover .mark__tile{transform:rotate(-90deg)}
-.mark__txt{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;
-  text-transform:uppercase;line-height:1.3;color:#3A3D4C}
-.mark__txt b{display:block;color:var(--ink);font-weight:700;letter-spacing:.22em}
-.nav__links{display:flex;gap:26px;align-items:center}
-.nav__links a{
-  font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;padding:6px 0;position:relative;
-}
-.nav__links a::after{
-  content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
-  background:var(--ink);transform:scaleX(0);transform-origin:right;
-  transition:transform .4s var(--ease);
-}
-.nav__links a:hover::after{transform:scaleX(1);transform-origin:left}
-.btn{
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--f-mono);font-size:11px;font-weight:700;
-  letter-spacing:.16em;text-transform:uppercase;
-  padding:13px 20px;background:var(--ink);color:var(--oyster);
-  position:relative;overflow:hidden;isolation:isolate;
-}
-.btn span{position:relative;z-index:1}
-.btn::before{
-  content:"";position:absolute;inset:0;background:var(--klein);
-  transform:translateY(101%);transition:transform .45s var(--ease);z-index:0;
-}
-.btn:hover::before{transform:translateY(0)}
-.btn--ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px rgba(10,11,18,.28)}
-.btn--ghost:hover{color:var(--oyster)}
-.btn--light{background:var(--oyster);color:var(--klein-dark)}
-.btn--light::before{background:var(--signal)}
-.btn--light:hover{color:var(--oyster)}
-.nav__burger{display:none;width:40px;height:34px;position:relative}
-.nav__burger i{position:absolute;left:8px;right:8px;height:2px;background:var(--ink);transition:transform .4s var(--ease),opacity .3s}
-.nav__burger i:nth-child(1){top:12px}
-.nav__burger i:nth-child(2){bottom:12px}
-body.menu-open .nav__burger i:nth-child(1){transform:translateY(4px) rotate(45deg)}
-body.menu-open .nav__burger i:nth-child(2){transform:translateY(-4px) rotate(-45deg)}
-
-/* ---------- language switch ---------- */
-.lang{display:flex;gap:1px;background:rgba(10,11,18,.26);
-  border:1px solid rgba(10,11,18,.26);flex:none;margin-left:auto}
-.lang__b{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.14em;
-  padding:9px 11px;background:var(--oyster);color:#5A5D70;
-  transition:background .35s var(--ease),color .35s var(--ease)}
-.lang__b:hover{color:var(--ink)}
-.lang__b.is-on{background:var(--ink);color:var(--oyster)}
-
-.progress{position:fixed;top:0;left:0;height:2px;background:var(--signal);width:0;z-index:99;transition:width .1s linear}
-
-/* ============================================================
-   HERO — THE SEAM
-   ============================================================ */
-.hero{padding-top:0}
-.stage{
-  position:relative;height:100svh;min-height:600px;width:100%;
-  overflow:hidden;cursor:col-resize;user-select:none;touch-action:pan-y;
-}
-.layer{position:absolute;inset:0;display:flex;align-items:center}
-.layer__in{width:100%;max-width:var(--rail);margin-inline:auto;padding:110px var(--pad) 96px}
-
-/* build (bottom) layer */
-.layer--build{background:var(--oyster)}
-.grid-lines{position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(to right,rgba(29,43,224,.14) 1px,transparent 1px);
-  background-size:calc(100%/12) 100%;
-  mask-image:linear-gradient(to bottom,transparent,#000 12%,#000 88%,transparent);
-}
-.grid-lines::after{
-  content:"";position:absolute;inset:0;
-  background-image:linear-gradient(to bottom,rgba(10,11,18,.055) 1px,transparent 1px);
-  background-size:100% 34px;
-}
-/* hero title — 20% smaller than the original scale so long lines
-   (especially German) stay inside the stage */
-.h-title{font-size:clamp(37px,8.2vw,122px);max-width:14ch}
-html[lang="de"] .h-title{font-size:clamp(34px,7.4vw,112px);max-width:min(18ch,100%)}
-.h-title .l{display:block;overflow:hidden}
-.h-title .l i{display:block;font-style:normal;transform:translateY(105%);
-  transition:transform 1.05s var(--ease)}
-body.lit .h-title .l i{transform:translateY(0)}
-body.lit .h-title .l:nth-child(2) i{transition-delay:.09s}
-body.lit .h-title .l:nth-child(3) i{transition-delay:.18s}
-.layer--build .h-title{
-  color:transparent;-webkit-text-stroke:1.15px var(--klein);
-}
-.layer--build .h-title .l:nth-child(3) i{-webkit-text-stroke-color:var(--signal)}
-.layer--design .h-title{color:var(--oyster)}
-.layer--design .h-title .l:nth-child(3) i{color:var(--signal)}
-
-.h-sub{margin:34px 0 0;max-width:40ch;font-size:clamp(16px,1.35vw,19px);line-height:1.5}
-.layer--build .h-sub{color:#3C3F51}
-.layer--design .h-sub{color:color-mix(in srgb,var(--oyster) 82%,transparent)}
-.h-eyebrow{margin-bottom:clamp(24px,4vw,44px)}
-.layer--design .h-eyebrow{color:var(--oyster)}
-.h-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px}
-.layer--design .btn--ghost{color:var(--oyster);box-shadow:inset 0 0 0 1px rgba(239,238,233,.4)}
-.layer--design .btn--ghost::before{background:var(--oyster)}
-.layer--design .btn--ghost:hover{color:var(--klein-dark)}
-
-/* design (top, clipped) layer */
-.layer--design{
-  background:var(--klein);
-  clip-path:inset(0 calc(100% - var(--seam)) 0 0);
-}
-.layer--design::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(120% 90% at 8% 0%,rgba(255,255,255,.16),transparent 58%),
-             radial-gradient(90% 70% at 95% 100%,var(--klein-deep),transparent 60%);
-  pointer-events:none;
-}
-.layer--design .layer__in{position:relative;z-index:1}
-
-/* annotations, only visible on the build side */
-.anno{position:absolute;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--klein);white-space:nowrap;opacity:0;
-  transition:opacity .7s var(--ease) .5s}
-body.lit .anno{opacity:.9}
-.anno::before{content:"";position:absolute;background:var(--klein)}
-.anno--a{top:22%;right:6%}
-.anno--a::before{left:-46px;top:50%;width:38px;height:1px}
-.anno--b{bottom:26%;right:6%;color:var(--signal)}
-.anno--b::before{left:-46px;top:50%;width:38px;height:1px;background:var(--signal)}
-.anno--c{top:46%;right:6%}
-.anno--c::before{left:-46px;top:50%;width:38px;height:1px}
-.measure{position:absolute;left:var(--pad);right:6%;bottom:14%;height:1px;background:rgba(29,43,224,.4);opacity:0;
-  transition:opacity .7s var(--ease) .55s}
-body.lit .measure{opacity:1}
-.measure::before,.measure::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:var(--klein)}
-.measure::before{left:0}
-.measure::after{right:0}
-
-/* seam handle */
-.seam{
-  position:absolute;top:0;bottom:0;left:var(--seam);width:1px;
-  background:var(--oyster);z-index:6;pointer-events:none;
-}
-.seam__grip{
-  position:absolute;top:50%;left:50%;translate:-50% -50%;
-  width:58px;height:58px;border-radius:50%;background:var(--oyster);
-  color:var(--klein-dark);display:grid;place-items:center;
-  box-shadow:0 8px 30px rgba(8,12,74,.28);pointer-events:auto;cursor:col-resize;
-  transition:scale .35s var(--ease);
-}
-.stage:hover .seam__grip{scale:1.08}
-.seam__grip svg{width:22px;height:22px}
-.seam__label{
-  position:absolute;top:calc(50% + 42px);left:50%;translate:-50% 0;
-  font-family:var(--f-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--oyster);white-space:nowrap;
-  background:var(--ink);padding:5px 9px;
-}
-.hero-foot{
-  position:absolute;left:var(--pad);right:var(--pad);bottom:22px;z-index:7;
-  display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
-  pointer-events:none;mix-blend-mode:difference;color:#fff;
-}
-.hero-foot .spec{color:inherit;opacity:.75}
-.scroll-cue{display:flex;align-items:center;gap:8px}
-.scroll-cue i{display:block;width:1px;height:30px;background:currentColor;
-  animation:cue 2.4s var(--ease) infinite;transform-origin:top}
-@keyframes cue{0%,100%{transform:scaleY(.2)}50%{transform:scaleY(1)}}
-
-/* ============================================================
-   TICKER
-   ============================================================ */
-.ticker{background:var(--ink);color:var(--oyster);padding:15px 0;overflow:hidden;
-  border-block:1px solid rgba(239,238,233,.14)}
-.ticker__track{display:flex;width:max-content;animation:slide 34s linear infinite}
-.ticker:hover .ticker__track{animation-play-state:paused}
-@keyframes slide{to{transform:translateX(-50%)}}
-.ticker__set{display:flex;align-items:center;flex:none}
-.ticker__item{font-family:var(--f-display);font-variation-settings:"wdth" 112,"wght" 700;
-  font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding-inline:26px;
-  display:flex;align-items:center;gap:26px;white-space:nowrap}
-.ticker__item::after{content:"";width:5px;height:5px;background:var(--signal);flex:none}
-
-/* ============================================================
-   reveal utility
-   ============================================================ */
-.rise{opacity:0;transform:translateY(28px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.rise.in{opacity:1;transform:none}
-[data-d="1"]{transition-delay:.08s}
-[data-d="2"]{transition-delay:.16s}
-[data-d="3"]{transition-delay:.24s}
-[data-d="4"]{transition-delay:.32s}
-[data-d="5"]{transition-delay:.4s}
-
-/* ============================================================
-   MANIFESTO
-   ============================================================ */
-.manifesto{max-width:1120px}
-.manifesto p{
-  font-family:var(--f-display);font-variation-settings:"wdth" 92,"wght" 500;
-  font-size:clamp(24px,3.4vw,50px);line-height:1.16;letter-spacing:-.02em;margin:0;
-  text-wrap:balance;
-}
-.manifesto .w{opacity:.2;transition:opacity .5s var(--ease)}
-.manifesto .w.on{opacity:1}
-.manifesto .hl{color:var(--klein)}
-.man-foot{display:flex;flex-wrap:wrap;gap:40px;margin-top:56px;
-  padding-top:26px;border-top:1px solid rgba(10,11,18,.15)}
-.man-foot div{max-width:26ch}
-.man-foot h4{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;margin:0 0 8px;color:var(--klein)}
-.man-foot p{font-size:15.5px;margin:0;color:#3C3F51;line-height:1.55}
-
-/* ============================================================
-   CAPABILITIES — expanding panels
-   ============================================================ */
-.caps{background:var(--ink);color:var(--oyster)}
-.caps .eyebrow{color:var(--signal)}
-.caps__head{display:flex;justify-content:space-between;align-items:flex-end;
-  gap:30px;flex-wrap:wrap;margin-bottom:clamp(34px,5vw,58px)}
-.caps__head h2{font-size:clamp(34px,5.4vw,74px);color:var(--oyster)}
-.caps__head p{max-width:34ch;margin:0;color:rgba(239,238,233,.62);font-size:16px}
-.panels{display:flex;gap:2px;height:min(62vh,520px)}
-.panel{
-  position:relative;flex:1 1 0;min-width:0;background:#111220;
-  overflow:hidden;cursor:pointer;
-  transition:flex-grow .75s var(--ease),background .5s var(--ease);
-  display:flex;flex-direction:column;justify-content:flex-end;padding:24px;
-}
-.panel.is-open{flex-grow:4.4;background:var(--klein)}
-.panel__no{position:absolute;top:20px;left:24px;font-family:var(--f-mono);
-  font-size:10px;letter-spacing:.16em;color:rgba(239,238,233,.4)}
-.panel.is-open .panel__no{color:rgba(239,238,233,.75)}
-.panel__name{
-  font-family:var(--f-display);font-variation-settings:"wdth" 78,"wght" 800;
-  text-transform:uppercase;font-size:clamp(17px,1.5vw,22px);letter-spacing:-.01em;
-  line-height:1;writing-mode:vertical-rl;transform:rotate(180deg);
-  transition:writing-mode 0s,opacity .3s;
-}
-.panel.is-open .panel__name{writing-mode:horizontal-tb;transform:none;
-  font-variation-settings:"wdth" 118,"wght" 900;font-size:clamp(22px,2.6vw,40px)}
-.panel__body{
-  opacity:0;max-height:0;overflow:hidden;
-  transition:opacity .45s var(--ease) .18s,max-height .6s var(--ease);
-}
-.panel.is-open .panel__body{opacity:1;max-height:280px}
-.panel__body p{margin:14px 0 0;font-size:15.5px;line-height:1.5;max-width:40ch;
-  color:rgba(239,238,233,.8)}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
-.tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  padding:5px 9px;border:1px solid rgba(239,238,233,.32);color:rgba(239,238,233,.85)}
-
-/* ============================================================
-   PRODUCTS  (static — no new motion, same tokens)
-   ============================================================ */
-.prods__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
-  flex-wrap:wrap;margin-bottom:clamp(30px,4vw,50px)}
-.prods__head h2{font-size:clamp(34px,5.4vw,74px)}
-.prods{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;
-  background:rgba(10,11,18,.16);border:1px solid rgba(10,11,18,.16)}
-.prod{
-  grid-column:span 2;background:var(--oyster);
-  padding:clamp(24px,2.4vw,34px);display:flex;flex-direction:column;
-  transition:background .45s var(--ease);
-}
-.prod:hover{background:var(--oyster-2)}
-.prod--wide{grid-column:span 3}
-.prod__top{display:flex;justify-content:space-between;align-items:center;
-  gap:14px;margin-bottom:clamp(20px,2.4vw,30px)}
-.prod__no{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;color:var(--spec)}
-.prod__status{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;
-  text-transform:uppercase;padding:5px 9px;border:1px solid rgba(29,43,224,.4);color:var(--klein)}
-.prod__status--soon{border-color:rgba(255,90,60,.55);color:var(--signal)}
-.prod h3{font-family:var(--f-display);font-variation-settings:"wdth" 112,"wght" 900;
-  text-transform:uppercase;font-size:clamp(22px,2.5vw,34px);letter-spacing:-.02em;
-  line-height:.95;margin:0 0 12px}
-.prod > p{margin:0 0 20px;font-size:15.5px;line-height:1.55;color:#41445A;max-width:46ch}
-.prod ul{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:9px}
-.prod li{font-size:15px;padding-left:20px;position:relative;line-height:1.45}
-.prod li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--klein)}
-.prod .tags{margin:0 0 20px}
-.prod .tag{border-color:rgba(10,11,18,.22);color:#41445A}
-.prod__foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(10,11,18,.18);
-  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-  font-family:var(--f-mono);font-size:12.5px;letter-spacing:.05em;color:#41445A}
-.prod__foot a{color:var(--klein);border-bottom:1px solid currentColor;padding-bottom:2px}
-.prod--collab{grid-column:span 6;background:var(--ink);color:var(--oyster)}
-.prod--collab:hover{background:var(--ink)}
-.prod--collab h3{color:var(--oyster)}
-.prod--collab .prod__no{color:rgba(239,238,233,.5)}
-.collab{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(28px,4vw,64px);
-  align-items:start;width:100%}
-.collab p{color:rgba(239,238,233,.72);font-size:15.5px;line-height:1.55;max-width:38ch;margin:0 0 26px}
-.collab__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,32px)}
-.collab__grid > div{padding-top:16px;border-top:1px solid rgba(239,238,233,.24)}
-.collab__grid h4{font-family:var(--f-display);font-variation-settings:"wdth" 100,"wght" 800;
-  text-transform:uppercase;font-size:15px;letter-spacing:.01em;margin:0 0 8px}
-.collab__grid p{margin:0;font-size:14.5px;color:rgba(239,238,233,.68);max-width:none}
-
-/* ============================================================
-   PROCESS
-   ============================================================ */
-.process{background:var(--oyster-2)}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(10,11,18,.16);
-  margin-top:clamp(30px,4vw,52px);border:1px solid rgba(10,11,18,.16)}
-.step{background:var(--oyster-2);padding:clamp(22px,2.4vw,32px);position:relative;
-  transition:background .45s var(--ease)}
-.step:hover{background:var(--oyster)}
-.step__no{font-family:var(--f-display);font-variation-settings:"wdth" 125,"wght" 900;
-  font-size:clamp(38px,5vw,70px);line-height:.8;color:transparent;
-  -webkit-text-stroke:1.1px var(--klein);display:block;margin-bottom:22px;
-  transition:color .45s var(--ease)}
-.step:hover .step__no{color:var(--klein)}
-.step h3{font-family:var(--f-display);font-variation-settings:"wdth" 100,"wght" 800;
-  text-transform:uppercase;font-size:17px;letter-spacing:.01em;margin:0 0 10px}
-.step p{margin:0;font-size:15px;line-height:1.55;color:#41445A}
-.step__len{margin-top:18px;padding-top:12px;border-top:1px solid rgba(10,11,18,.14)}
-
-/* ============================================================
-   STATS
-   ============================================================ */
-.stats{background:var(--klein);color:var(--oyster)}
-.stats__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,40px)}
-.stat__n{font-family:var(--f-display);font-variation-settings:"wdth" 125,"wght" 900;
-  font-size:clamp(46px,7vw,104px);line-height:.85;letter-spacing:-.04em;display:flex;align-items:baseline}
-.stat__n sup{font-size:.34em;font-weight:700;margin-left:.06em;top:-.9em;position:relative}
-.stat__l{margin:14px 0 0;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;color:rgba(239,238,233,.72);max-width:20ch;line-height:1.5}
-
-/* ============================================================
-   QUOTE
-   ============================================================ */
-.quote{background:var(--ink);color:var(--oyster)}
-.quote blockquote{margin:0;max-width:20ch}
-.quote__mark{font-family:var(--f-display);font-variation-settings:"wdth" 125,"wght" 900;
-  font-size:clamp(70px,11vw,150px);line-height:.6;color:var(--signal);display:block;margin-bottom:8px}
-.quote__t{font-family:var(--f-display);font-variation-settings:"wdth" 88,"wght" 500;
-  font-size:clamp(26px,4.4vw,62px);line-height:1.08;letter-spacing:-.025em;margin:0;max-width:18ch}
-.quote__by{display:flex;align-items:center;gap:14px;margin-top:40px}
-.quote__ini{width:46px;height:46px;background:var(--klein);display:grid;place-items:center;
-  font-family:var(--f-mono);font-size:12px;font-weight:700;flex:none}
-.quote__by p{margin:0;font-size:15px;line-height:1.4}
-.quote__by span{display:block;color:rgba(239,238,233,.55);font-family:var(--f-mono);
-  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
-.quote__nav{display:flex;gap:8px;margin-top:44px}
-.qdot{width:34px;height:3px;background:rgba(239,238,233,.24);transition:background .35s}
-.qdot.on{background:var(--signal)}
-
-/* ============================================================
-   ENGAGEMENT
-   ============================================================ */
-.tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
-  margin-top:clamp(30px,4vw,52px)}
-.track{border:1px solid rgba(10,11,18,.2);padding:clamp(24px,2.6vw,36px);
-  display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
-.track:hover{transform:translateY(-6px);box-shadow:14px 14px 0 var(--klein)}
-.track--mid{background:var(--ink);color:var(--oyster);border-color:var(--ink)}
-.track--mid:hover{box-shadow:14px 14px 0 var(--signal)}
-.track__tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--klein);margin-bottom:auto}
-.track--mid .track__tag{color:var(--signal)}
-.track h3{font-family:var(--f-display);font-variation-settings:"wdth" 118,"wght" 900;
-  text-transform:uppercase;font-size:clamp(26px,2.8vw,38px);letter-spacing:-.02em;margin:28px 0 10px;line-height:.95}
-.track > p{margin:0 0 22px;font-size:15.5px;line-height:1.55;color:#41445A}
-.track--mid > p{color:rgba(239,238,233,.72)}
-.track__price{font-family:var(--f-mono);font-size:13px;letter-spacing:.06em;
-  padding-top:18px;border-top:1px solid rgba(10,11,18,.18)}
-.track--mid .track__price{border-color:rgba(239,238,233,.24)}
-.track ul{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:9px}
-.track li{font-size:15px;padding-left:20px;position:relative;line-height:1.45}
-.track li::before{content:"";position:absolute;left:0;top:.6em;width:9px;height:1px;background:var(--klein)}
-.track--mid li::before{background:var(--signal)}
-
-/* ============================================================
-   FAQ
-   ============================================================ */
-.faq{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,80px);align-items:start}
-.acc{border-top:1px solid rgba(10,11,18,.2)}
-.acc__item{border-bottom:1px solid rgba(10,11,18,.2)}
-.acc__btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;
-  padding:22px 0;text-align:left;font-family:var(--f-display);
-  font-variation-settings:"wdth" 100,"wght" 700;font-size:clamp(16px,1.5vw,20px);
-  text-transform:uppercase;letter-spacing:-.005em;transition:color .3s}
-.acc__btn:hover{color:var(--klein)}
-.acc__ico{width:26px;height:26px;flex:none;position:relative}
-.acc__ico::before,.acc__ico::after{content:"";position:absolute;background:currentColor;
-  left:50%;top:50%;translate:-50% -50%;transition:transform .45s var(--ease)}
-.acc__ico::before{width:13px;height:1.5px}
-.acc__ico::after{width:1.5px;height:13px}
-.acc__item.open .acc__ico::after{transform:scaleY(0)}
-.acc__item.open .acc__btn{color:var(--klein)}
-.acc__panel{max-height:0;overflow:hidden;transition:max-height .55s var(--ease)}
-.acc__panel p{margin:0 0 24px;font-size:16px;line-height:1.6;color:#41445A;max-width:58ch}
-
-/* ============================================================
-   CONTACT
-   ============================================================ */
-.contact{background:var(--klein);color:var(--oyster)}
-.contact .eyebrow{color:var(--oyster)}
-.contact__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,5vw,86px);align-items:start}
-.contact h2{font-size:clamp(38px,6.4vw,92px);color:var(--oyster)}
-html[lang="de"] .contact h2{font-size:clamp(32px,4.8vw,68px)}
-.contact__side p{color:rgba(239,238,233,.78);max-width:36ch}
-.contact__direct{margin-top:44px;display:grid;gap:20px}
-.contact__direct a{font-family:var(--f-display);font-variation-settings:"wdth" 92,"wght" 600;
-  font-size:clamp(17px,1.8vw,24px);border-bottom:1px solid rgba(239,238,233,.3);
-  padding-bottom:8px;display:flex;justify-content:space-between;gap:14px;
-  transition:border-color .35s,padding-left .4s var(--ease)}
-.contact__direct a:hover{border-color:var(--signal);padding-left:8px}
-.field{margin-bottom:20px}
-.field label{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;
-  text-transform:uppercase;color:rgba(239,238,233,.66);margin-bottom:9px}
-.field input,.field textarea{
-  width:100%;background:transparent;border:0;border-bottom:1px solid rgba(239,238,233,.36);
-  color:var(--oyster);font-family:var(--f-body);font-size:17px;padding:10px 0;
-  transition:border-color .35s;
-}
-.field input::placeholder,.field textarea::placeholder{color:rgba(239,238,233,.38)}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--signal)}
-.field textarea{resize:vertical;min-height:88px}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  padding:9px 13px;border:1px solid rgba(239,238,233,.36);transition:background .3s,color .3s,border-color .3s}
-.chip:hover{border-color:var(--oyster)}
-.chip.on{background:var(--oyster);color:var(--klein);border-color:var(--oyster)}
-.form-note{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;
-  color:rgba(239,238,233,.6);margin:18px 0 0;text-transform:none;letter-spacing:.04em}
-.sent{border:1px solid var(--signal);padding:26px;margin-top:22px;display:none}
-.sent.show{display:block}
-.sent h4{font-family:var(--f-display);font-variation-settings:"wdth" 110,"wght" 800;
-  text-transform:uppercase;margin:0 0 8px;font-size:19px;color:var(--signal)}
-.sent p{margin:0;font-size:15.5px;color:rgba(239,238,233,.85)}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.foot{background:var(--ink);color:var(--oyster);padding-top:clamp(56px,7vw,90px)}
-.foot__cols{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:34px;
-  padding-bottom:clamp(44px,6vw,74px)}
-.foot h5{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--spec);margin:0 0 16px}
-.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-.foot li a{font-size:15px;color:rgba(239,238,233,.82);transition:color .3s,padding-left .35s var(--ease)}
-.foot li a:hover{color:var(--signal);padding-left:6px}
-.foot__blurb{font-size:15.5px;color:rgba(239,238,233,.7);max-width:30ch;margin:0}
-.lockup{
-  font-family:var(--f-display);font-variation-settings:"wdth" 125,"wght" 900;
-  font-size:clamp(80px,22vw,340px);line-height:.72;letter-spacing:-.045em;
-  display:block;text-align:center;color:transparent;-webkit-text-stroke:1.4px rgba(239,238,233,.4);
-  transition:color .8s var(--ease);padding-bottom:8px;
-}
-.lockup:hover{color:var(--klein);-webkit-text-stroke-color:var(--klein)}
-.foot__bar{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  padding:22px 0 30px;border-top:1px solid rgba(239,238,233,.16);margin-top:14px}
-.foot__bar .spec{color:rgba(239,238,233,.5)}
-.foot__bar a.spec:hover{color:var(--signal)}
-.to-top{display:flex;align-items:center;gap:8px}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width:1080px){
-  .stats__grid{grid-template-columns:repeat(2,1fr);row-gap:44px}
-  .steps{grid-template-columns:repeat(2,1fr)}
-  .tracks{grid-template-columns:1fr}
-  .prod{grid-column:span 3}
-  .prod--wide{grid-column:span 6}
-  .collab{grid-template-columns:1fr}
-  .faq{grid-template-columns:1fr}
-  .foot__cols{grid-template-columns:1fr 1fr}
-}
-@media (max-width:860px){
-  .nav__links{
-    position:fixed;inset:0;background:var(--ink);flex-direction:column;
-    justify-content:center;gap:22px;transform:translateY(-100%);
-    transition:transform .6s var(--ease);z-index:-1;
+  :root{
+    --bg:#0B0D10;
+    --surface:#14171B;
+    --surface-2:#1B1F24;
+    --line:#262B31;
+    --text:#E8EAED;
+    --muted:#8B92A0;
+    --accent:#5EEAD4;
+    --accent-dim:#2E7C71;
+    --amber:#F5A623;
+    --radius:2px;
+    --maxw:1240px;
   }
-  body.menu-open .nav__links{transform:translateY(0)}
-  .nav__links a{color:var(--oyster);font-size:15px;letter-spacing:.2em}
-  .nav__burger{display:block;z-index:2}
-  .lang{margin-left:auto;margin-right:10px;z-index:2}
-  .nav .btn{display:none}
-  .stage{cursor:default}
-  .seam__label{display:none}
-  .layer__in{padding-top:96px}
-  .panels{flex-direction:column;height:auto}
-  .panel{padding:20px;min-height:66px}
-  .panel.is-open{flex-grow:1}
-  .panel__name{writing-mode:horizontal-tb;transform:none;
-    font-variation-settings:"wdth" 112,"wght" 900;font-size:22px}
-  .panel__no{position:static;margin-bottom:8px;display:block}
-  .panel{justify-content:flex-start}
-  .contact__grid{grid-template-columns:1fr}
-  .collab__grid{grid-template-columns:1fr}
-  .man-foot{gap:26px}
-  .hero-foot .spec:first-child{display:none}
-}
-@media (max-width:560px){
-  .stats__grid{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr}
-  .prod,.prod--wide{grid-column:span 6}
-  .foot__cols{grid-template-columns:1fr}
-  .anno{display:none}
-}
 
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;
-    transition-duration:.001ms !important}
-  .rise{opacity:1;transform:none}
-  .h-title .l i{transform:none}
-  .manifesto .w{opacity:1}
-  .anno,.measure{opacity:1}
-}
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.1;
+  }
+
+  .mono{
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.04em;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 clamp(20px,5vw,48px);
+  }
+
+  /* language toggling */
+  [data-en]{display:none;}
+  body.lang-en [data-de]{display:none;}
+  body.lang-en [data-en]{display:inline;}
+  body.lang-en [data-en-block]{display:block;}
+
+  /* === NAV === */
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:100;
+    background:#FFFFFF;
+    border-top:3px solid var(--accent-dim);
+    border-bottom:1px solid #E4E7EA;
+  }
+
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 clamp(20px,5vw,48px);
+    height:104px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .logo{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .logo .dot{
+    width:8px;height:8px;
+    background:var(--accent);
+    display:inline-block;
+    box-shadow:0 0 12px var(--accent);
+  }
+
+  nav.menu{
+    display:flex;
+    gap:clamp(14px,2vw,32px);
+    align-items:center;
+  }
+
+  nav.menu a{
+    font-size:14px;
+    color:#4A5058;
+    font-weight:600;
+    padding:6px 0;
+    position:relative;
+    white-space:nowrap;
+    transition:color .2s;
+  }
+
+  nav.menu a::after{
+    content:'';
+    position:absolute;
+    left:0;bottom:0;
+    width:0;height:1px;
+    background:var(--accent-dim);
+    transition:width .25s;
+  }
+
+  nav.menu a:hover{color:#0B0D10;}
+  nav.menu a:hover::after{width:100%;}
+
+
+  .brand{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+
+  .brand-mark{
+    height:52px;
+    width:auto;
+    display:block;
+  }
+
+  .brand-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.2;
+  }
+
+  .brand-text .brand-name{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.13em;
+    text-transform:uppercase;
+    color:#6B7178;
+    white-space:nowrap;
+  }
+
+  @media (max-width:560px){
+    .brand-text{display:none;}
+  }
+
+  .nav-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+
+  .lang-toggle{
+    display:flex;
+    border:1px solid #D6DADE;
+    border-radius:var(--radius);
+    overflow:hidden;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+  }
+
+  .lang-toggle button{
+    background:transparent;
+    border:none;
+    color:#6B7178;
+    padding:7px 12px;
+    cursor:pointer;
+    transition:background .2s,color .2s;
+  }
+
+  .lang-toggle button.active{
+    background:var(--accent-dim);
+    color:#FFFFFF;
+    font-weight:600;
+  }
+
+  .menu-btn{
+    display:none;
+    background:none;border:none;
+    color:#0B0D10;
+    font-size:22px;
+    cursor:pointer;
+  }
+
+  @media (max-width:920px){
+    nav.menu{
+      position:fixed;
+      top:104px;left:0;right:0;
+      background:#FFFFFF;
+      border-bottom:1px solid #E4E7EA;
+      flex-direction:column;
+      align-items:flex-start;
+      padding:20px clamp(20px,5vw,48px) 28px;
+      gap:16px;
+      transform:translateY(-8px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s, transform .2s;
+    }
+    nav.menu.open{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+    }
+    .menu-btn{display:block;}
+  }
+
+  /* === HERO === */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding-top:104px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+
+  .scan-grid{
+    position:absolute;
+    inset:0;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      rgba(94,234,212,0.05) 28px
+    );
+    pointer-events:none;
+  }
+
+  .beam{
+    position:absolute;
+    top:0;
+    left:-20%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(100deg,
+      transparent 0%,
+      rgba(94,234,212,0.06) 45%,
+      rgba(94,234,212,0.10) 50%,
+      rgba(94,234,212,0.06) 55%,
+      transparent 100%);
+    transform:skewX(-15deg);
+    animation:sweep 9s ease-in-out infinite;
+    pointer-events:none;
+  }
+
+  @keyframes sweep{
+    0%{left:-30%;}
+    50%{left:110%;}
+    100%{left:110%;}
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    max-width:820px;
+  }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--accent);
+    text-transform:uppercase;
+    margin-bottom:24px;
+  }
+
+  .eyebrow::before{
+    content:'';
+    width:24px;height:1px;
+    background:var(--accent);
+  }
+
+  .hero h1{
+    font-size:clamp(40px,6vw,76px);
+    margin-bottom:24px;
+  }
+
+  .hero h1 span{color:var(--accent);}
+
+  .hero p.lead{
+    font-size:18px;
+    color:var(--muted);
+    max-width:560px;
+    margin-bottom:36px;
+  }
+
+  .cta-row{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:var(--radius);
+    transition:all .2s;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+
+  .btn-primary{
+    background:var(--accent);
+    color:#06110F;
+  }
+  .btn-primary:hover{
+    background:#7FF3E8;
+    box-shadow:0 0 24px rgba(94,234,212,0.35);
+  }
+
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+
+  .hero-specs{
+    position:absolute;
+    right:clamp(20px,5vw,48px);
+    bottom:60px;
+    display:flex;
+    gap:40px;
+    z-index:2;
+  }
+
+  @media (max-width:920px){ .hero-specs{display:none;} }
+
+  .spec-item{
+    font-family:'JetBrains Mono',monospace;
+  }
+  .spec-item .num{
+    font-size:28px;
+    color:var(--text);
+    display:block;
+  }
+  .spec-item .label{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+
+  /* === SECTION SHELL === */
+  section{
+    padding:120px 0;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+  }
+
+  .section-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:14px;
+    display:block;
+  }
+
+  .section-head h2{
+    font-size:clamp(28px,3.4vw,42px);
+  }
+
+  .section-head p{
+    color:var(--muted);
+    max-width:420px;
+    font-size:15px;
+  }
+
+  .placeholder-block{
+    border:1px dashed var(--line);
+    background:var(--surface);
+    border-radius:var(--radius);
+    padding:14px 18px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:10px;
+  }
+
+  /* === ÜBER UNS === */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:64px;
+    align-items:start;
+  }
+
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+
+  .about-copy p{
+    color:var(--muted);
+    margin-bottom:18px;
+    max-width:520px;
+  }
+
+  .about-media{
+    aspect-ratio:4/3;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    text-align:center;
+    padding:20px;
+  }
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    margin-top:40px;
+  }
+
+  .stat-row div{
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+
+  .stat-row .num{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:32px;
+    color:var(--accent);
+  }
+  .stat-row .label{
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  /* === PRODUKTENTWICKLUNG === */
+  .process-list{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .process-item{
+    display:grid;
+    grid-template-columns:80px 1fr 1fr;
+    gap:32px;
+    padding:32px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .process-item:last-child{border-bottom:1px solid var(--line);}
+
+  @media (max-width:760px){
+    .process-item{grid-template-columns:50px 1fr;}
+    .process-item .process-desc{grid-column:1/-1;}
+  }
+
+  .process-num{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:14px;
+  }
+
+  .process-item h3{
+    font-size:19px;
+  }
+
+  .process-desc{
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  /* === DIENSTLEISTER === */
+  .service-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+
+  @media (max-width:860px){ .service-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .service-grid{grid-template-columns:1fr;} }
+
+  .service-card{
+    background:var(--bg);
+    padding:32px 28px;
+    transition:background .2s;
+  }
+  .service-card:hover{background:var(--surface);}
+
+  .service-icon{
+    width:36px;height:36px;
+    border:1px solid var(--accent-dim);
+    border-radius:var(--radius);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--accent);
+    margin-bottom:20px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;
+  }
+
+  .service-card h3{
+    font-size:17px;
+    margin-bottom:10px;
+  }
+
+  .service-card p{
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  /* === PROJEKTE === */
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:28px;
+  }
+
+  @media (max-width:760px){ .project-grid{grid-template-columns:1fr;} }
+
+  .project-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--surface);
+  }
+
+  .project-thumb{
+    aspect-ratio:16/9;
+    background:
+      repeating-linear-gradient(45deg, var(--surface-2) 0 10px, var(--surface) 10px 20px);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+  }
+
+  .project-body{
+    padding:22px 24px;
+  }
+
+  .project-body .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+
+  .project-body h3{
+    font-size:18px;
+    margin:8px 0 8px;
+  }
+
+  .project-body p{
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  /* === REFERENZEN === */
+  .logo-strip{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:56px;
+  }
+
+  @media (max-width:760px){ .logo-strip{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:480px){ .logo-strip{grid-template-columns:repeat(2,1fr);} }
+
+  .logo-cell{
+    background:var(--bg);
+    aspect-ratio:2/1;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+  }
+
+  .quote-block{
+    border-left:2px solid var(--accent);
+    padding-left:28px;
+    max-width:640px;
+  }
+
+  .quote-block p{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:22px;
+    line-height:1.5;
+    margin-bottom:16px;
+  }
+
+  .quote-attr{
+    color:var(--muted);
+    font-size:13px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* === KONTAKT === */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:64px;
+  }
+
+  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr;} }
+
+  .contact-info dl{
+    display:grid;
+    gap:22px;
+    margin-top:30px;
+  }
+  .contact-info dt{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    color:var(--muted);
+    letter-spacing:0.06em;
+    margin-bottom:4px;
+  }
+  .contact-info dd{
+    font-size:15px;
+  }
+
+  form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  @media (max-width:560px){ .form-row{grid-template-columns:1fr;} }
+
+  label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    color:var(--muted);
+    letter-spacing:0.06em;
+    margin-bottom:8px;
+    display:block;
+  }
+
+  input,textarea{
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:13px 14px;
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    transition:border-color .2s;
+  }
+
+  input:focus,textarea:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+
+  textarea{resize:vertical;min-height:120px;}
+
+  /* === FOOTER === */
+  footer{
+    padding:40px 0;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .footer-links{
+    display:flex;
+    gap:24px;
+  }
+  .footer-links a{color:var(--muted);}
+  .footer-links a:hover{color:var(--accent);}
+
+  ::selection{background:var(--accent);color:#06110F;}
 </style>
 </head>
 <body>
 
-<div class="progress" id="progress"></div>
-
-<!-- ========================= NAV ========================= -->
-<header class="nav" id="nav">
-  <a href="#hero" class="mark" aria-label="DDC home">
-    <span class="mark__tile">DDC</span>
-    <span class="mark__txt"><b>Design Development</b>Corporation</span>
-  </a>
-  <nav class="nav__links" id="navLinks">
-    <a href="#what">What we do</a>
-    <a href="#products">Products</a>
-    <a href="#process">Process</a>
-    <a href="#tracks">Engagements</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-  <div class="lang" id="lang" role="group" aria-label="Language">
-    <button class="lang__b is-on" data-lang="en" aria-pressed="true">EN</button>
-    <button class="lang__b" data-lang="de" aria-pressed="false">DE</button>
+<header>
+  <div class="nav-inner">
+    <a href="#startseite" class="brand">
+      <img src="data:image/png;base64,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" alt="DDC Logo" class="brand-mark">
+      <span class="brand-text">
+        <span class="brand-name" data-de>Design Development Corporation</span>
+        <span class="brand-name" data-en>Design Development Corporation</span>
+      </span>
+    </a>
+    <nav class="menu" id="menu">
+      <a href="#startseite" data-de>Startseite</a><a href="#startseite" data-en>Home</a>
+      <a href="#ueber-uns" data-de>Über uns</a><a href="#ueber-uns" data-en>About</a>
+      <a href="#produktentwicklung" data-de>Produktentwicklung</a><a href="#produktentwicklung" data-en>Product Development</a>
+      <a href="#dienstleister" data-de>Dienstleister</a><a href="#dienstleister" data-en>Services</a>
+      <a href="#projekte" data-de>Aktuelle Projekte</a><a href="#projekte" data-en>Current Projects</a>
+      <a href="#referenzen" data-de>Referenzen</a><a href="#referenzen" data-en>References</a>
+      <a href="#kontakt" data-de>Kontakt</a><a href="#kontakt" data-en>Contact</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button id="btn-de" class="active">DE</button>
+        <button id="btn-en">EN</button>
+      </div>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
   </div>
-  <a href="#contact" class="btn"><span>Start a project</span></a>
-  <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
 </header>
 
-<!-- ========================= HERO ========================= -->
-<section class="hero" id="hero">
-  <div class="stage" id="stage">
-
-    <!-- BUILD LAYER (underneath) -->
-    <div class="layer layer--build">
-      <div class="grid-lines"></div>
-      <div class="layer__in">
-        <p class="eyebrow h-eyebrow">Design Development Corporation</p>
-        <h1 class="display h-title">
-          <span class="l"><i>We design it.</i></span>
-          <span class="l"><i>We build it.</i></span>
-          <span class="l"><i>No handoff.</i></span>
-        </h1>
-        <p class="h-sub">Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.</p>
-        <div class="h-cta">
-          <a href="#contact" class="btn"><span>Start a project</span></a>
-          <a href="#products" class="btn btn--ghost"><span>See the products</span></a>
-        </div>
-      </div>
-      <span class="anno anno--a">h1 · archivo 900 · wdth 125</span>
-      <span class="anno anno--c">fill #1D2BE0 · grid 12 col</span>
-      <span class="anno anno--b">ship: edge · lcp 0.9s</span>
-      <span class="measure"></span>
+<!-- ================= HERO / STARTSEITE ================= -->
+<section class="hero" id="startseite" style="border-bottom:1px solid var(--line);">
+  <div class="scan-grid"></div>
+  <div class="beam"></div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow"><span data-de>Produktentwicklung &amp; Engineering</span><span data-en>Product Development &amp; Engineering</span></span>
+    <h1><span data-de>[Firmenname]</span><span data-en>[Company Name]</span> —<br><span>[<span data-de>Platzhalter-Headline</span><span data-en>Placeholder Headline</span>]</span></h1>
+    <p class="lead">
+      <span data-de>[Platzhalter: Kurzer Einführungstext, der beschreibt, was DDC macht und für wen. Wird später mit finalem Content ersetzt.]</span>
+      <span data-en>[Placeholder: short intro text describing what DDC does and for whom. To be replaced with final content.]</span>
+    </p>
+    <div class="cta-row">
+      <a href="#kontakt" class="btn btn-primary"><span data-de>Projekt anfragen</span><span data-en>Start a project</span></a>
+      <a href="#produktentwicklung" class="btn btn-ghost"><span data-de>Leistungen ansehen</span><span data-en>View services</span></a>
     </div>
-
-    <!-- DESIGN LAYER (clipped by the seam) -->
-    <div class="layer layer--design" id="designLayer" aria-hidden="true">
-      <div class="layer__in">
-        <p class="eyebrow h-eyebrow">Design Development Corporation</p>
-        <p class="display h-title">
-          <span class="l"><i>We design it.</i></span>
-          <span class="l"><i>We build it.</i></span>
-          <span class="l"><i>No handoff.</i></span>
-        </p>
-        <p class="h-sub">Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.</p>
-        <div class="h-cta">
-          <span class="btn"><span>Start a project</span></span>
-          <span class="btn btn--ghost"><span>See the products</span></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEAM -->
-    <div class="seam" id="seam">
-      <button class="seam__grip" id="grip" aria-label="Drag to compare the design and the build">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square">
-          <path d="M9 7 4 12l5 5M15 7l5 5-5 5"/>
-        </svg>
-      </button>
-      <span class="seam__label">Drag — design ⟷ build</span>
-    </div>
-
-    <div class="hero-foot">
-      <span class="spec">Left: the design. Right: the build. Same file.</span>
-      <span class="spec scroll-cue"><i></i> Scroll</span>
-    </div>
+  </div>
+  <div class="hero-specs">
+    <div class="spec-item"><span class="num">[00]</span><span class="label mono" data-de>Jahre Erfahrung</span><span class="label mono" data-en>Years experience</span></div>
+    <div class="spec-item"><span class="num">[00]</span><span class="label mono" data-de>Projekte</span><span class="label mono" data-en>Projects</span></div>
+    <div class="spec-item"><span class="num">[00]</span><span class="label mono" data-de>Partner</span><span class="label mono" data-en>Partners</span></div>
   </div>
 </section>
 
-<!-- ========================= TICKER ========================= -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track" id="ticker">
-    <div class="ticker__set">
-      <span class="ticker__item">Brand identity</span>
-      <span class="ticker__item">Product design</span>
-      <span class="ticker__item">Web &amp; app builds</span>
-      <span class="ticker__item">Data platforms</span>
-      <span class="ticker__item">AI &amp; agents</span>
-      <span class="ticker__item">3D &amp; motion</span>
-      <span class="ticker__item">Beamer &amp; LED supply</span>
-    </div>
-    <div class="ticker__set">
-      <span class="ticker__item">Brand identity</span>
-      <span class="ticker__item">Product design</span>
-      <span class="ticker__item">Web &amp; app builds</span>
-      <span class="ticker__item">Data platforms</span>
-      <span class="ticker__item">AI &amp; agents</span>
-      <span class="ticker__item">3D &amp; motion</span>
-      <span class="ticker__item">Beamer &amp; LED supply</span>
-    </div>
-  </div>
-</div>
-
-<!-- ========================= MANIFESTO ========================= -->
-<section class="band">
+<!-- ================= ÜBER UNS ================= -->
+<section id="ueber-uns">
   <div class="wrap">
-    <p class="eyebrow rise" style="margin-bottom:34px">Why we're built this way</p>
-    <div class="manifesto" id="manifesto">
-      <p data-split>Most projects die in the gap between the design file and the repository. DDC removes the gap. One team scopes it, draws it, writes it, and keeps it running after launch.</p>
-    </div>
-    <div class="man-foot">
-      <div class="rise" data-d="1">
-        <h4>Small on purpose</h4>
-        <p>Four to six people on a project. You talk to the people doing the work, not an account layer.</p>
-      </div>
-      <div class="rise" data-d="2">
-        <h4>Fixed scope, fixed price</h4>
-        <p>You get a written scope and a number before anyone opens an editor. Change it and we re-quote in writing.</p>
-      </div>
-      <div class="rise" data-d="3">
-        <h4>You own everything</h4>
-        <p>Source files, repositories, infrastructure and documentation transfer to you at handover. No lock-in.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= CAPABILITIES ========================= -->
-<section class="band caps" id="what">
-  <div class="wrap">
-    <div class="caps__head">
+    <div class="section-head">
       <div>
-        <p class="eyebrow rise" style="margin-bottom:20px">What we do</p>
-        <h2 class="display rise" data-d="1">Five things,<br>done properly</h2>
+        <span class="section-tag">01 · <span data-de>Über uns</span><span data-en>About</span></span>
+        <h2><span data-de>Wer wir sind</span><span data-en>Who we are</span></h2>
       </div>
-      <p class="rise" data-d="2">We'd rather be excellent at a short list than passable at everything. Open a panel to see what's inside each one.</p>
     </div>
-
-    <div class="panels rise" data-d="3" id="panels">
-      <article class="panel is-open" data-panel>
-        <span class="panel__no">01</span>
-        <h3 class="panel__name">Brand &amp; identity</h3>
-        <div class="panel__body">
-          <p>Naming, logotype, type system, colour, and a design system your team can actually use without calling us.</p>
-          <div class="tags"><span class="tag">Identity</span><span class="tag">Design system</span><span class="tag">Guidelines</span><span class="tag">Print</span></div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p><span data-de>[Platzhalter: Unternehmensgeschichte, Mission und Werte von DDC. Beschreibung des Teams und der Herangehensweise.]</span>
+           <span data-en>[Placeholder: company history, mission and values of DDC. Description of the team and approach.]</span></p>
+        <p><span data-de>[Platzhalter: Zweiter Absatz — was DDC von anderen Anbietern unterscheidet.]</span>
+           <span data-en>[Placeholder: second paragraph — what sets DDC apart from other providers.]</span></p>
+        <div class="stat-row">
+          <div><div class="num">[00]</div><div class="label mono" data-de>Jahre am Markt</div><div class="label mono" data-en>Years in market</div></div>
+          <div><div class="num">[00]</div><div class="label mono" data-de>Mitarbeitende</div><div class="label mono" data-en>Team members</div></div>
+          <div><div class="num">[00]</div><div class="label mono" data-de>Länder beliefert</div><div class="label mono" data-en>Countries served</div></div>
         </div>
-      </article>
-
-      <article class="panel" data-panel>
-        <span class="panel__no">02</span>
-        <h3 class="panel__name">Product design</h3>
-        <div class="panel__body">
-          <p>Interface design for software people use all day. Research, flows, prototypes, and specs written so engineers don't have to guess.</p>
-          <div class="tags"><span class="tag">UX research</span><span class="tag">UI</span><span class="tag">Prototyping</span><span class="tag">Accessibility</span></div>
-        </div>
-      </article>
-
-      <article class="panel" data-panel>
-        <span class="panel__no">03</span>
-        <h3 class="panel__name">Web &amp; app development</h3>
-        <div class="panel__body">
-          <p>Marketing sites, web apps, and internal tools. Typed, tested, fast on a mid-range phone, and hosted somewhere you control.</p>
-          <div class="tags"><span class="tag">React / Next.js</span><span class="tag">TypeScript</span><span class="tag">Headless CMS</span><span class="tag">Edge hosting</span></div>
-        </div>
-      </article>
-
-      <article class="panel" data-panel>
-        <span class="panel__no">04</span>
-        <h3 class="panel__name">Data &amp; AI engineering</h3>
-        <div class="panel__body">
-          <p>Pipelines, warehouses and dashboards that give one answer instead of four. Plus retrieval and agent systems that stay inside your data.</p>
-          <div class="tags"><span class="tag">Python / SQL</span><span class="tag">Spark</span><span class="tag">Databricks</span><span class="tag">RAG</span><span class="tag">Power BI</span></div>
-        </div>
-      </article>
-
-      <article class="panel" data-panel>
-        <span class="panel__no">05</span>
-        <h3 class="panel__name">3D &amp; motion</h3>
-        <div class="panel__body">
-          <p>Product visualisation, configurators and animation for teams selling something physical that's hard to photograph.</p>
-          <div class="tags"><span class="tag">Blender</span><span class="tag">Three.js</span><span class="tag">Product film</span><span class="tag">Configurators</span></div>
-        </div>
-      </article>
+      </div>
+      <div class="about-media">[<span data-de>Platzhalter: Team- oder Firmenbild</span><span data-en>Placeholder: team or company image</span>]</div>
     </div>
   </div>
 </section>
 
-<!-- ========================= PRODUCTS ========================= -->
-<section class="band" id="products">
+<!-- ================= PRODUKTENTWICKLUNG ================= -->
+<section id="produktentwicklung">
   <div class="wrap">
-    <div class="prods__head">
+    <div class="section-head">
       <div>
-        <p class="eyebrow rise" style="margin-bottom:20px">Products &amp; supply</p>
-        <h2 class="display rise" data-d="1">Hardware<br>we ship</h2>
+        <span class="section-tag">02 · <span data-de>Produktentwicklung</span><span data-en>Product Development</span></span>
+        <h2><span data-de>Vom Konzept zum Produkt</span><span data-en>From concept to product</span></h2>
       </div>
-      <p class="lede rise" data-d="2" style="font-size:17px">Projection and LED, sold as a working room rather than a box on a pallet. Delivered, installed, commissioned.</p>
+      <p><span data-de>[Platzhalter: kurze Beschreibung des Entwicklungsprozesses]</span><span data-en>[Placeholder: short description of the development process]</span></p>
     </div>
+    <div class="process-list">
+      <div class="process-item">
+        <div class="process-num">01</div>
+        <h3><span data-de>[Phase 1 — Platzhaltertitel]</span><span data-en>[Phase 1 — placeholder title]</span></h3>
+        <div class="process-desc"><span data-de>[Platzhaltertext zur ersten Phase des Produktentwicklungsprozesses.]</span><span data-en>[Placeholder text for the first phase of the product development process.]</span></div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">02</div>
+        <h3><span data-de>[Phase 2 — Platzhaltertitel]</span><span data-en>[Phase 2 — placeholder title]</span></h3>
+        <div class="process-desc"><span data-de>[Platzhaltertext zur zweiten Phase.]</span><span data-en>[Placeholder text for the second phase.]</span></div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">03</div>
+        <h3><span data-de>[Phase 3 — Platzhaltertitel]</span><span data-en>[Phase 3 — placeholder title]</span></h3>
+        <div class="process-desc"><span data-de>[Platzhaltertext zur dritten Phase.]</span><span data-en>[Placeholder text for the third phase.]</span></div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">04</div>
+        <h3><span data-de>[Phase 4 — Platzhaltertitel]</span><span data-en>[Phase 4 — placeholder title]</span></h3>
+        <div class="process-desc"><span data-de>[Platzhaltertext zur vierten Phase.]</span><span data-en>[Placeholder text for the fourth phase.]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="prods">
+<!-- ================= DIENSTLEISTER ================= -->
+<section id="dienstleister">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">03 · <span data-de>Dienstleister</span><span data-en>Services</span></span>
+        <h2><span data-de>Was wir anbieten</span><span data-en>What we offer</span></h2>
+      </div>
+      <p><span data-de>[Platzhalter: kurze Einleitung zu den Leistungen]</span><span data-en>[Placeholder: short intro to the services]</span></p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-icon">01</div>
+        <h3><span data-de>[Leistung 1]</span><span data-en>[Service 1]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">02</div>
+        <h3><span data-de>[Leistung 2]</span><span data-en>[Service 2]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">03</div>
+        <h3><span data-de>[Leistung 3]</span><span data-en>[Service 3]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">04</div>
+        <h3><span data-de>[Leistung 4]</span><span data-en>[Service 4]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">05</div>
+        <h3><span data-de>[Leistung 5]</span><span data-en>[Service 5]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">06</div>
+        <h3><span data-de>[Leistung 6]</span><span data-en>[Service 6]</span></h3>
+        <p><span data-de>[Platzhaltertext für Leistungsbeschreibung.]</span><span data-en>[Placeholder text for service description.]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <article class="prod rise">
-        <div class="prod__top">
-          <span class="prod__no">01</span>
-          <span class="prod__status">In stock</span>
+<!-- ================= AKTUELLE PROJEKTE ================= -->
+<section id="projekte">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">04 · <span data-de>Aktuelle Projekte</span><span data-en>Current Projects</span></span>
+        <h2><span data-de>Woran wir gerade arbeiten</span><span data-en>What we're working on</span></h2>
+      </div>
+      <p><span data-de>[Platzhalter: kurze Einleitung zu aktuellen Projekten]</span><span data-en>[Placeholder: short intro to current projects]</span></p>
+    </div>
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-thumb">[<span data-de>Projektbild</span><span data-en>Project image</span>]</div>
+        <div class="project-body">
+          <span class="tag"><span data-de>[Kategorie]</span><span data-en>[Category]</span></span>
+          <h3><span data-de>[Projekttitel 1]</span><span data-en>[Project title 1]</span></h3>
+          <p><span data-de>[Platzhaltertext zur Projektbeschreibung.]</span><span data-en>[Placeholder project description text.]</span></p>
         </div>
-        <h3>Beamer &amp; projection</h3>
-        <p>Laser projectors, lenses and screens specified for your room, not from a catalogue page. We calculate the throw, mount it, cable it and commission it on site.</p>
-        <ul>
-          <li>Laser projectors, 5,000–20,000 ANSI lumens</li>
-          <li>Short-throw and ultra-short-throw optics</li>
-          <li>Fixed-frame, motorised and rollable screens</li>
-          <li>Mounts, signal distribution and control</li>
-        </ul>
-        <div class="tags"><span class="tag">Conference</span><span class="tag">Auditorium</span><span class="tag">Museum</span><span class="tag">Retail</span></div>
-        <div class="prod__foot">
-          <span>From €1,890 · per room</span>
-          <a href="#contact">Request a spec</a>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">[<span data-de>Projektbild</span><span data-en>Project image</span>]</div>
+        <div class="project-body">
+          <span class="tag"><span data-de>[Kategorie]</span><span data-en>[Category]</span></span>
+          <h3><span data-de>[Projekttitel 2]</span><span data-en>[Project title 2]</span></h3>
+          <p><span data-de>[Platzhaltertext zur Projektbeschreibung.]</span><span data-en>[Placeholder project description text.]</span></p>
         </div>
-      </article>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">[<span data-de>Projektbild</span><span data-en>Project image</span>]</div>
+        <div class="project-body">
+          <span class="tag"><span data-de>[Kategorie]</span><span data-en>[Category]</span></span>
+          <h3><span data-de>[Projekttitel 3]</span><span data-en>[Project title 3]</span></h3>
+          <p><span data-de>[Platzhaltertext zur Projektbeschreibung.]</span><span data-en>[Placeholder project description text.]</span></p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">[<span data-de>Projektbild</span><span data-en>Project image</span>]</div>
+        <div class="project-body">
+          <span class="tag"><span data-de>[Kategorie]</span><span data-en>[Category]</span></span>
+          <h3><span data-de>[Projekttitel 4]</span><span data-en>[Project title 4]</span></h3>
+          <p><span data-de>[Platzhaltertext zur Projektbeschreibung.]</span><span data-en>[Placeholder project description text.]</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <article class="prod rise" data-d="1">
-        <div class="prod__top">
-          <span class="prod__no">02</span>
-          <span class="prod__status">Made to order</span>
-        </div>
-        <h3>Rollable LED display</h3>
-        <p>The Rolling series — FAST, GATE and FLOOR. The panel rolls into a flight case, goes up with two people, and carries a walk-on load where the floor version is used.</p>
-        <ul>
-          <li>Pixel pitch P2.5 – P5.9</li>
-          <li>Indoor, outdoor IP65 and floor-rated builds</li>
-          <li>Roll-up transport — no truss on standard spans</li>
-          <li>Spare modules and receiving cards held in stock</li>
-        </ul>
-        <div class="tags"><span class="tag">Events</span><span class="tag">Touring</span><span class="tag">Rental</span><span class="tag">Stage</span></div>
-        <div class="prod__foot">
-          <span>Quoted per m² · 4–6 weeks</span>
-          <a href="#contact">Get a quote</a>
-        </div>
-      </article>
+<!-- ================= REFERENZEN ================= -->
+<section id="referenzen">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">05 · <span data-de>Referenzen</span><span data-en>References</span></span>
+        <h2><span data-de>Wer uns vertraut</span><span data-en>Who trusts us</span></h2>
+      </div>
+    </div>
+    <div class="logo-strip">
+      <div class="logo-cell">[LOGO 1]</div>
+      <div class="logo-cell">[LOGO 2]</div>
+      <div class="logo-cell">[LOGO 3]</div>
+      <div class="logo-cell">[LOGO 4]</div>
+      <div class="logo-cell">[LOGO 5]</div>
+    </div>
+    <div class="quote-block">
+      <p><span data-de>„[Platzhalter: Kundenzitat / Testimonial, das später ersetzt wird.]“</span><span data-en>"[Placeholder: client quote / testimonial to be replaced later.]"</span></p>
+      <div class="quote-attr">— <span data-de>[Name, Position, Unternehmen]</span><span data-en>[Name, position, company]</span></div>
+    </div>
+  </div>
+</section>
 
-      <article class="prod rise" data-d="2">
-        <div class="prod__top">
-          <span class="prod__no">03</span>
-          <span class="prod__status prod__status--soon">Pre-launch</span>
-        </div>
-        <h3>New products</h3>
-        <p>What is next on the line. The first production run goes to a small group of customers who want a say in the final specification.</p>
-        <ul>
-          <li>Transparent LED mesh for glass façades</li>
-          <li>Battery-backed mobile LED trolley</li>
-          <li>All-in-one meeting-room projection bar</li>
-        </ul>
-        <div class="tags"><span class="tag">Q4 2026</span><span class="tag">Limited run</span><span class="tag">Pilot pricing</span></div>
-        <div class="prod__foot">
-          <span>Early-access list open</span>
-          <a href="#contact">Join the list</a>
-        </div>
-      </article>
-
-      <article class="prod prod--wide rise" data-d="1">
-        <div class="prod__top">
-          <span class="prod__no">04</span>
-          <span class="prod__status prod__status--soon">In research</span>
-        </div>
-        <h3>Research products</h3>
-        <p>Work that is not a product yet. We prototype with partners who have a real installation to test in, and we publish what we learn rather than sitting on it.</p>
-        <ul>
-          <li>Micro-LED below 1&nbsp;mm pitch — thermal behaviour and yield</li>
-          <li>Content scaler that fits any source to any wall geometry</li>
-          <li>Sensor-driven brightness and power-draw modelling</li>
-          <li>Serviceability: field-replaceable modules without a hot-melt rig</li>
-        </ul>
-        <div class="tags"><span class="tag">Prototype</span><span class="tag">Test site wanted</span><span class="tag">Open notes</span></div>
-        <div class="prod__foot">
-          <span>Co-funded pilots · shared IP terms</span>
-          <a href="#contact">Read the notes</a>
-        </div>
-      </article>
-
-      <article class="prod prod--wide rise" data-d="2">
-        <div class="prod__top">
-          <span class="prod__no">05</span>
-          <span class="prod__status">Supply chain</span>
-        </div>
-        <h3>Sourcing &amp; service</h3>
-        <p>Everything around the panel, because that is where projects usually stall. One contract for the hardware, the freight, the paperwork and the years after handover.</p>
-        <ul>
-          <li>CE, EMC and RoHS documentation supplied with every unit</li>
-          <li>EU warehousing — no 12-week container wait on repeats</li>
-          <li>2-year warranty, 5 years of spare-part availability</li>
-          <li>On-site service in DACH, remote diagnostics elsewhere</li>
-        </ul>
-        <div class="tags"><span class="tag">Logistics</span><span class="tag">Compliance</span><span class="tag">Warranty</span><span class="tag">Service</span></div>
-        <div class="prod__foot">
-          <span>Included with every order</span>
-          <a href="#contact">Ask about terms</a>
-        </div>
-      </article>
-
-      <article class="prod prod--collab rise" data-d="3">
-        <div class="collab">
+<!-- ================= KONTAKT ================= -->
+<section id="kontakt">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">06 · <span data-de>Kontakt</span><span data-en>Contact</span></span>
+        <h2><span data-de>Sprechen wir über Ihr Projekt</span><span data-en>Let's talk about your project</span></h2>
+      </div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p><span data-de>[Platzhalter: kurzer Kontakt-Einleitungstext.]</span><span data-en>[Placeholder: short contact intro text.]</span></p>
+        <dl>
           <div>
-            <div class="prod__top">
-              <span class="prod__no">06</span>
-              <span class="prod__status prod__status--soon">Open</span>
-            </div>
-            <h3>Collaboration</h3>
-            <p>If you manufacture, install or resell in the DACH region, there is a version of this that works for both of us. Three ways in, all of them written down before anyone ships anything.</p>
-            <a href="#contact" class="btn btn--light"><span>Talk about a partnership</span></a>
+            <dt data-de>E-Mail</dt><dt data-en>Email</dt>
+            <dd>[info@ddc-platzhalter.de]</dd>
           </div>
-          <div class="collab__grid">
-            <div>
-              <h4>OEM &amp; white label</h4>
-              <p>Our panels and optics under your badge, with your packaging, manual and firmware splash. Minimum run of ten units.</p>
-            </div>
-            <div>
-              <h4>Distribution</h4>
-              <p>Regional resale with protected territory, dealer pricing, demo stock and technical training for your sales team.</p>
-            </div>
-            <div>
-              <h4>Joint development</h4>
-              <p>You bring the application and the test site, we bring the engineering. Costs and rights agreed in writing up front.</p>
-            </div>
+          <div>
+            <dt data-de>Telefon</dt><dt data-en>Phone</dt>
+            <dd>[+49 000 0000000]</dd>
+          </div>
+          <div>
+            <dt data-de>Adresse</dt><dt data-en>Address</dt>
+            <dd>[<span data-de>Straße, PLZ Ort, Land</span><span data-en>Street, ZIP City, Country</span>]</dd>
+          </div>
+        </dl>
+      </div>
+      <form onsubmit="event.preventDefault();">
+        <div class="form-row">
+          <div>
+            <label data-de>Name</label><label data-en>Name</label>
+            <input type="text" placeholder="[…]">
+          </div>
+          <div>
+            <label data-de>E-Mail</label><label data-en>Email</label>
+            <input type="email" placeholder="[…]">
           </div>
         </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ========================= PROCESS ========================= -->
-<section class="band process" id="process">
-  <div class="wrap">
-    <p class="eyebrow rise" style="margin-bottom:20px">How a project runs</p>
-    <h2 class="display rise" data-d="1" style="font-size:clamp(34px,5.4vw,74px)">Four stages,<br>in this order</h2>
-    <div class="steps">
-      <div class="step rise" data-d="1">
-        <span class="step__no">01</span>
-        <h3>Scope</h3>
-        <p>We interview whoever owns the problem, audit what exists, and write the scope. You get a fixed price and a date.</p>
-        <p class="spec step__len">1–2 weeks</p>
-      </div>
-      <div class="step rise" data-d="2">
-        <span class="step__no">02</span>
-        <h3>Design</h3>
-        <p>Direction first, then screens. You see real content in the design, never lorem ipsum, and you review every week.</p>
-        <p class="spec step__len">2–5 weeks</p>
-      </div>
-      <div class="step rise" data-d="3">
-        <span class="step__no">03</span>
-        <h3>Build</h3>
-        <p>The same team writes the code. You get a staging link from week one and watch it fill in, so nothing is a surprise.</p>
-        <p class="spec step__len">4–12 weeks</p>
-      </div>
-      <div class="step rise" data-d="4">
-        <span class="step__no">04</span>
-        <h3>Run</h3>
-        <p>Launch, then 30 days of fixes included. After that you take it in-house or we stay on a retainer. Your call.</p>
-        <p class="spec step__len">Ongoing</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= STATS ========================= -->
-<section class="band stats">
-  <div class="wrap">
-    <div class="stats__grid">
-      <div class="rise">
-        <div class="stat__n"><span data-count="64">0</span></div>
-        <p class="stat__l">Projects shipped since 2019</p>
-      </div>
-      <div class="rise" data-d="1">
-        <div class="stat__n"><span data-count="9">0</span></div>
-        <p class="stat__l">Industries, from logistics to healthcare</p>
-      </div>
-      <div class="rise" data-d="2">
-        <div class="stat__n"><span data-count="12">0</span></div>
-        <p class="stat__l">Weeks, median scope to launch</p>
-      </div>
-      <div class="rise" data-d="3">
-        <div class="stat__n"><span data-count="100">0</span><sup>%</sup></div>
-        <p class="stat__l">Built in-house, never subcontracted</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= QUOTE ========================= -->
-<section class="band quote" id="quote">
-  <div class="wrap">
-    <blockquote class="rise">
-      <span class="quote__mark">“</span>
-      <p class="quote__t" id="qText">They sent one team and it stayed the same team for five months. That has never happened to us before.</p>
-      <div class="quote__by">
-        <span class="quote__ini" id="qIni">MR</span>
-        <p><span id="qRole">Head of Operations · Halden Logistics</span><strong id="qName">Marit Røed</strong></p>
-      </div>
-    </blockquote>
-    <div class="quote__nav" id="qNav">
-      <button class="qdot on" aria-label="Testimonial 1"></button>
-      <button class="qdot" aria-label="Testimonial 2"></button>
-      <button class="qdot" aria-label="Testimonial 3"></button>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= ENGAGEMENTS ========================= -->
-<section class="band" id="tracks">
-  <div class="wrap">
-    <p class="eyebrow rise" style="margin-bottom:20px">Ways to work with us</p>
-    <h2 class="display rise" data-d="1" style="font-size:clamp(34px,5.4vw,74px)">Pick the size<br>of the problem</h2>
-
-    <div class="tracks">
-      <div class="track rise" data-d="1">
-        <span class="track__tag">Track A</span>
-        <h3>Sprint</h3>
-        <p>Two focused weeks on one question: a rebrand direction, a prototype, an audit of what you already have.</p>
-        <ul>
-          <li>Kickoff, two reviews, one handover</li>
-          <li>Figma files and a written recommendation</li>
-          <li>No commitment past the two weeks</li>
-        </ul>
-        <p class="track__price">From €3,200 · fixed</p>
-      </div>
-
-      <div class="track track--mid rise" data-d="2">
-        <span class="track__tag">Track B · most chosen</span>
-        <h3>Build</h3>
-        <p>The full run. Scope, design, build, launch — one team, one price, one date.</p>
-        <ul>
-          <li>Weekly reviews on a live staging link</li>
-          <li>Design system, source code, and docs</li>
-          <li>30 days of post-launch fixes included</li>
-        </ul>
-        <p class="track__price">From €12,000 · fixed scope</p>
-      </div>
-
-      <div class="track rise" data-d="3">
-        <span class="track__tag">Track C</span>
-        <h3>Partner</h3>
-        <p>A standing slice of our week for teams shipping continuously. Design and engineering on tap.</p>
-        <ul>
-          <li>Reserved days each month, rolled over if unused</li>
-          <li>Shared board, same-day answers</li>
-          <li>Monthly, cancel with 30 days' notice</li>
-        </ul>
-        <p class="track__price">From €2,400 / month</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= FAQ ========================= -->
-<section class="band" id="faq" style="padding-top:0">
-  <div class="wrap faq">
-    <div>
-      <p class="eyebrow rise" style="margin-bottom:20px">Questions</p>
-      <h2 class="display rise" data-d="1" style="font-size:clamp(30px,4.4vw,58px)">Before<br>you write</h2>
-      <p class="rise" data-d="2" style="margin-top:26px;color:#41445A;max-width:30ch;font-size:16px">If yours isn't here, ask it in the form below. We answer within one working day.</p>
-    </div>
-
-    <div class="acc rise" data-d="2" id="acc">
-      <div class="acc__item">
-        <button class="acc__btn">What does a project cost?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>Most full builds land between €12,000 and €60,000 depending on scope. We quote a fixed price after the scoping stage, so you're never approving an open-ended hourly bill. Smaller sprints start at €3,200.</p></div>
-      </div>
-      <div class="acc__item">
-        <button class="acc__btn">How fast can you start?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>Scoping usually starts within two weeks of signing. Build slots are booked four to six weeks out. If you have a hard deadline, say so in your first message and we'll tell you straight away whether it's possible.</p></div>
-      </div>
-      <div class="acc__item">
-        <button class="acc__btn">Do you work with our in-house team?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>Often. We can take a whole project, or drop into your repository and board and work alongside your developers. We'll match your stack, your review process, and your definition of done.</p></div>
-      </div>
-      <div class="acc__item">
-        <button class="acc__btn">Who owns the code and design files?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>You do, from the first commit. Repositories, design files, domains and hosting accounts are in your name and transfer at handover with documentation. We don't hold anything hostage.</p></div>
-      </div>
-      <div class="acc__item">
-        <button class="acc__btn">Is everything GDPR-compliant?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>Yes. We build with EU hosting by default, write the Impressum and privacy notice with you, and keep a processing agreement on file. For AI features we can run models on infrastructure you control so nothing leaves your environment.</p></div>
-      </div>
-      <div class="acc__item">
-        <button class="acc__btn">What happens after launch?<span class="acc__ico"></span></button>
-        <div class="acc__panel"><p>Thirty days of fixes are included in every build. After that you either take it in-house — we run a handover session and leave written docs — or move onto the Partner track for ongoing work.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= CONTACT ========================= -->
-<section class="band contact" id="contact">
-  <div class="wrap contact__grid">
-    <div class="contact__side">
-      <p class="eyebrow rise" style="margin-bottom:22px">Start a project</p>
-      <h2 class="display rise" data-d="1">Tell us<br>what's broken</h2>
-      <p class="rise" data-d="2" style="margin-top:26px">A paragraph is enough to start. If it's not a fit we'll say so quickly and point you somewhere better.</p>
-      <div class="contact__direct rise" data-d="3">
-        <a href="mailto:info@ddc.projecttechnic.de">info@ddc.projecttechnic.de <span>→</span></a>
-        <a href="tel:+49000000000">+49 (0) 00 000 000 <span>→</span></a>
-        <a href="mailto:info@ddc.projecttechnic.de?subject=Call">Book a 20-minute call <span>→</span></a>
-      </div>
-    </div>
-
-    <div class="rise" data-d="2">
-      <div class="field">
-        <label for="f-name">Your name</label>
-        <input id="f-name" type="text" placeholder="Jane Bauer">
-      </div>
-      <div class="field">
-        <label for="f-org">Company</label>
-        <input id="f-org" type="text" placeholder="Where you work">
-      </div>
-      <div class="field">
-        <label for="f-mail">Email</label>
-        <input id="f-mail" type="email" placeholder="you@company.com">
-      </div>
-      <div class="field">
-        <label>What do you need?</label>
-        <div class="chips" id="chipsNeed">
-          <button class="chip">Brand</button>
-          <button class="chip">Product design</button>
-          <button class="chip">Web build</button>
-          <button class="chip">Data / AI</button>
-          <button class="chip">3D / motion</button>
-          <button class="chip">Beamer / projection</button>
-          <button class="chip">LED display</button>
-          <button class="chip">Partnership</button>
-          <button class="chip">Not sure yet</button>
+        <div>
+          <label data-de>Unternehmen</label><label data-en>Company</label>
+          <input type="text" placeholder="[…]">
         </div>
-      </div>
-      <div class="field">
-        <label>Budget range</label>
-        <div class="chips" id="chipsBudget">
-          <button class="chip">Under €10k</button>
-          <button class="chip">€10–30k</button>
-          <button class="chip">€30–60k</button>
-          <button class="chip">€60k+</button>
+        <div>
+          <label data-de>Nachricht</label><label data-en>Message</label>
+          <textarea placeholder="[…]"></textarea>
         </div>
-      </div>
-      <div class="field">
-        <label for="f-msg">What's the project?</label>
-        <textarea id="f-msg" placeholder="What exists today, what should exist instead, and when you need it."></textarea>
-      </div>
-      <button class="btn btn--light" id="send"><span>Send it</span></button>
-      <p class="form-note">We reply within one working day. Your details stay with us and are never sold or shared.</p>
-      <div class="sent" id="sent">
-        <h4>Message ready</h4>
-        <p>This is a demo form — connect it to your inbox or form service and it'll send for real.</p>
-      </div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
+          <span data-de>Nachricht senden</span><span data-en>Send message</span>
+        </button>
+      </form>
     </div>
   </div>
 </section>
 
-<!-- ========================= FOOTER ========================= -->
-<footer class="foot">
-  <div class="wrap">
-    <div class="foot__cols">
-      <div>
-        <h5>Design Development Corporation</h5>
-        <p class="foot__blurb">A design and development studio. Same team from the first sketch to the last deploy.</p>
-      </div>
-      <div>
-        <h5>Studio</h5>
-        <ul>
-          <li><a href="#what">What we do</a></li>
-          <li><a href="#products">Products</a></li>
-          <li><a href="#process">Process</a></li>
-          <li><a href="#tracks">Engagements</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Company</h5>
-        <ul>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Journal</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Legal</h5>
-        <ul>
-          <li><a href="#">Impressum</a></li>
-          <li><a href="#">Datenschutz</a></li>
-          <li><a href="#">Terms</a></li>
-          <li><a href="#">Cookie settings</a></li>
-        </ul>
-      </div>
-    </div>
-    <a href="#hero" class="lockup" aria-label="Back to top">DDC</a>
-    <div class="foot__bar">
-      <span class="spec">© 2026 Design Development Corporation</span>
-      <a href="#hero" class="spec to-top">Back to top ↑</a>
+<footer>
+  <div class="wrap footer-inner">
+    <div>© <span id="year"></span> DDC. <span data-de>Alle Rechte vorbehalten.</span><span data-en>All rights reserved.</span></div>
+    <div class="footer-links">
+      <a href="#" data-de>Impressum</a><a href="#" data-en>Legal Notice</a>
+      <a href="#" data-de>Datenschutz</a><a href="#" data-en>Privacy Policy</a>
     </div>
   </div>
 </footer>
 
 <script>
-/* ============================================================
-   I18N — English (source) ⟷ German
-   Text stays in the HTML in English; German is applied at runtime.
-   No new animation is introduced by this file.
-   ============================================================ */
-window.I18N = {
-  meta: {
-    de: { title: "DDC — Design Development Corporation",
-          desc: "DDC ist ein Studio für Design und Entwicklung. Dasselbe Team vom ersten Strich bis zum letzten Deploy." },
-    en: { title: "DDC — Design Development Corporation",
-          desc: "DDC is a design and development studio. Same team from the first sketch to the last deploy." }
-  },
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-  manifesto: {
-    en: "Most projects die in the gap between the design file and the repository. DDC removes the gap. One team scopes it, draws it, writes it, and keeps it running after launch.",
-    de: "Die meisten Projekte sterben in der Lücke zwischen Designdatei und Repository. DDC schließt die Lücke. Ein Team steckt es ab, zeichnet es, schreibt es und hält es nach dem Launch am Laufen."
-  },
-  manifestoHl: { en: /gap|removes|One|team/, de: /Lücke|schließt|Ein|Team/ },
+  const menuBtn = document.getElementById('menuBtn');
+  const menu = document.getElementById('menu');
+  menuBtn.addEventListener('click', () => menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
 
-  quotes: {
-    en: [
-      {t:"They sent one team and it stayed the same team for five months. That has never happened to us before.", n:"Marit Røed", r:"Head of Operations · Halden Logistics", i:"MR"},
-      {t:"The configurator closed three deals in its first month. Our sales calls got twenty minutes shorter.", n:"Tomáš Král", r:"Sales Director · Rolling FAST", i:"TK"},
-      {t:"We had four versions of the truth. Now we have one, and the plant managers actually open it.", n:"Andrea Fuchs", r:"Head of BI · Nordhaus Werke", i:"AF"}
-    ],
-    de: [
-      {t:"Sie haben ein Team geschickt, und es blieb fünf Monate lang dasselbe Team. Das ist uns vorher noch nie passiert.", n:"Marit Røed", r:"Leiterin Betrieb · Halden Logistics", i:"MR"},
-      {t:"Der Konfigurator hat im ersten Monat drei Abschlüsse gebracht. Unsere Verkaufsgespräche sind zwanzig Minuten kürzer geworden.", n:"Tomáš Král", r:"Vertriebsleiter · Rolling FAST", i:"TK"},
-      {t:"Wir hatten vier Versionen der Wahrheit. Jetzt haben wir eine, und die Werksleiter öffnen sie tatsächlich.", n:"Andrea Fuchs", r:"Leiterin BI · Nordhaus Werke", i:"AF"}
-    ]
-  },
-
-  /* key = the English string exactly as it appears in the markup */
-  de: {
-    "What we do":"Leistungen",
-    "Products":"Produkte",
-    "Process":"Ablauf",
-    "Engagements":"Modelle",
-    "Start a project":"Projekt starten",
-    "We design it.":"Wir gestalten es.",
-    "We build it.":"Wir bauen es.",
-    "No handoff.":"Keine Übergabe.",
-    "Designers and engineers on one team, in one file. Nothing gets lost crossing the wall, because we never built one.":"Designer und Entwickler in einem Team, in einer Datei. Nichts geht beim Übergeben verloren, weil wir nie eine Wand gebaut haben.",
-    "See the products":"Produkte ansehen",
-    "Drag — design ⟷ build":"Ziehen — Design ⟷ Umsetzung",
-    "Left: the design. Right: the build. Same file.":"Links: das Design. Rechts: die Umsetzung. Dieselbe Datei.",
-    "Scroll":"Scrollen",
-    "Brand identity":"Markenidentität",
-    "Product design":"Produktdesign",
-    "Web & app builds":"Web- & App-Entwicklung",
-    "Data platforms":"Datenplattformen",
-    "AI & agents":"KI & Agenten",
-    "3D & motion":"3D & Motion",
-    "Beamer & LED supply":"Beamer- & LED-Lieferung",
-    "Why we're built this way":"Warum wir so aufgestellt sind",
-    "Small on purpose":"Klein mit Absicht",
-    "Four to six people on a project. You talk to the people doing the work, not an account layer.":"Vier bis sechs Personen pro Projekt. Sie sprechen mit den Menschen, die die Arbeit machen, nicht mit einer Kundenbetreuung.",
-    "Fixed scope, fixed price":"Fester Umfang, fester Preis",
-    "You get a written scope and a number before anyone opens an editor. Change it and we re-quote in writing.":"Sie erhalten einen schriftlichen Leistungsumfang und eine Zahl, bevor jemand einen Editor öffnet. Ändern Sie ihn, kalkulieren wir schriftlich neu.",
-    "You own everything":"Alles gehört Ihnen",
-    "Source files, repositories, infrastructure and documentation transfer to you at handover. No lock-in.":"Quelldateien, Repositories, Infrastruktur und Dokumentation gehen bei der Übergabe an Sie über. Kein Lock-in.",
-    "Five things,":"Fünf Dinge,",
-    "done properly":"richtig gemacht",
-    "We'd rather be excellent at a short list than passable at everything. Open a panel to see what's inside each one.":"Lieber auf einer kurzen Liste exzellent als überall passabel. Öffnen Sie ein Panel, um zu sehen, was darin steckt.",
-    "Brand & identity":"Marke & Identität",
-    "Naming, logotype, type system, colour, and a design system your team can actually use without calling us.":"Naming, Wortmarke, Typosystem, Farbe und ein Designsystem, das Ihr Team wirklich nutzen kann, ohne uns anzurufen.",
-    "Identity":"Identität",
-    "Design system":"Designsystem",
-    "Guidelines":"Guidelines",
-    "Print":"Print",
-    "Interface design for software people use all day. Research, flows, prototypes, and specs written so engineers don't have to guess.":"Interface-Design für Software, die man den ganzen Tag benutzt. Research, Flows, Prototypen und Spezifikationen, bei denen Entwickler nicht raten müssen.",
-    "UX research":"UX-Research",
-    "Accessibility":"Barrierefreiheit",
-    "Web & app development":"Web- & App-Entwicklung",
-    "Marketing sites, web apps, and internal tools. Typed, tested, fast on a mid-range phone, and hosted somewhere you control.":"Marketing-Websites, Web-Apps und interne Tools. Typisiert, getestet, schnell auf einem Mittelklasse-Handy und dort gehostet, wo Sie die Kontrolle haben.",
-    "Edge hosting":"Edge-Hosting",
-    "Data & AI engineering":"Data- & KI-Engineering",
-    "Pipelines, warehouses and dashboards that give one answer instead of four. Plus retrieval and agent systems that stay inside your data.":"Pipelines, Warehouses und Dashboards, die eine Antwort geben statt vier. Dazu Retrieval- und Agentensysteme, die in Ihren Daten bleiben.",
-    "Product visualisation, configurators and animation for teams selling something physical that's hard to photograph.":"Produktvisualisierung, Konfiguratoren und Animation für Teams, die etwas Physisches verkaufen, das sich schlecht fotografieren lässt.",
-    "Product film":"Produktfilm",
-    "Configurators":"Konfiguratoren",
-
-    "Products & supply":"Produkte & Lieferung",
-    "Hardware":"Hardware,",
-    "we ship":"die wir liefern",
-    "Projection and LED, sold as a working room rather than a box on a pallet. Delivered, installed, commissioned.":"Projektion und LED — verkauft als funktionierender Raum, nicht als Kiste auf einer Palette. Geliefert, installiert, in Betrieb genommen.",
-    "In stock":"Ab Lager",
-    "Beamer & projection":"Beamer & Projektion",
-    "Laser projectors, lenses and screens specified for your room, not from a catalogue page. We calculate the throw, mount it, cable it and commission it on site.":"Laserprojektoren, Objektive und Leinwände, ausgelegt auf Ihren Raum statt auf eine Katalogseite. Wir berechnen den Projektionsabstand, montieren, verkabeln und nehmen vor Ort in Betrieb.",
-    "Laser projectors, 5,000–20,000 ANSI lumens":"Laserprojektoren, 5.000–20.000 ANSI-Lumen",
-    "Short-throw and ultra-short-throw optics":"Kurzdistanz- und Ultrakurzdistanz-Optiken",
-    "Fixed-frame, motorised and rollable screens":"Rahmen-, Motor- und Rollleinwände",
-    "Mounts, signal distribution and control":"Halterungen, Signalverteilung und Steuerung",
-    "Conference":"Konferenz",
-    "Auditorium":"Auditorium",
-    "Museum":"Museum",
-    "Retail":"Handel",
-    "From €1,890 · per room":"Ab 1.890 € · pro Raum",
-    "Request a spec":"Auslegung anfragen",
-    "Made to order":"Auftragsfertigung",
-    "Rollable LED display":"Rollbares LED-Display",
-    "The Rolling series — FAST, GATE and FLOOR. The panel rolls into a flight case, goes up with two people, and carries a walk-on load where the floor version is used.":"Die Rolling-Serie — FAST, GATE und FLOOR. Das Panel rollt in einen Flightcase, steht mit zwei Personen und trägt begehbare Lasten, wo die FLOOR-Version eingesetzt wird.",
-    "Pixel pitch P2.5 – P5.9":"Pixelabstand P2.5 – P5.9",
-    "Indoor, outdoor IP65 and floor-rated builds":"Indoor, Outdoor IP65 und begehbare Ausführungen",
-    "Roll-up transport — no truss on standard spans":"Aufrollbarer Transport — kein Traversenbau bei Standardspannweiten",
-    "Spare modules and receiving cards held in stock":"Ersatzmodule und Receiving Cards ab Lager",
-    "Events":"Events",
-    "Touring":"Touring",
-    "Rental":"Vermietung",
-    "Stage":"Bühne",
-    "Quoted per m² · 4–6 weeks":"Preis pro m² · 4–6 Wochen",
-    "Get a quote":"Angebot anfordern",
-    "Pre-launch":"Vor dem Launch",
-    "New products":"Neue Produkte",
-    "What is next on the line. The first production run goes to a small group of customers who want a say in the final specification.":"Was als Nächstes vom Band läuft. Die erste Serie geht an einen kleinen Kreis von Kunden, die bei der finalen Spezifikation mitreden wollen.",
-    "Transparent LED mesh for glass façades":"Transparentes LED-Mesh für Glasfassaden",
-    "Battery-backed mobile LED trolley":"Mobiler LED-Trolley mit Akkupuffer",
-    "All-in-one meeting-room projection bar":"All-in-one-Projektionsleiste für Besprechungsräume",
-    "Limited run":"Kleinserie",
-    "Pilot pricing":"Pilotpreise",
-    "Early-access list open":"Early-Access-Liste offen",
-    "Join the list":"Auf die Liste",
-    "In research":"In der Forschung",
-    "Research products":"Forschungsprodukte",
-    "Work that is not a product yet. We prototype with partners who have a real installation to test in, and we publish what we learn rather than sitting on it.":"Arbeit, die noch kein Produkt ist. Wir bauen Prototypen mit Partnern, die eine echte Installation zum Testen haben, und veröffentlichen, was wir lernen, statt darauf zu sitzen.",
-    "Micro-LED below 1 mm pitch — thermal behaviour and yield":"Micro-LED unter 1 mm Pitch — Wärmeverhalten und Ausbeute",
-    "Content scaler that fits any source to any wall geometry":"Content-Scaler, der jede Quelle an jede Wandgeometrie anpasst",
-    "Sensor-driven brightness and power-draw modelling":"Sensorgesteuerte Helligkeits- und Verbrauchsmodellierung",
-    "Serviceability: field-replaceable modules without a hot-melt rig":"Servicefreundlichkeit: Module im Feld tauschbar, ohne Heißklebe-Rig",
-    "Prototype":"Prototyp",
-    "Test site wanted":"Teststandort gesucht",
-    "Open notes":"Offene Notizen",
-    "Co-funded pilots · shared IP terms":"Ko-finanzierte Pilotprojekte · geteilte IP-Rechte",
-    "Read the notes":"Notizen lesen",
-    "Supply chain":"Lieferkette",
-    "Sourcing & service":"Beschaffung & Service",
-    "Everything around the panel, because that is where projects usually stall. One contract for the hardware, the freight, the paperwork and the years after handover.":"Alles rund um das Panel, denn genau daran scheitern Projekte meistens. Ein Vertrag für Hardware, Fracht, Papiere und die Jahre nach der Übergabe.",
-    "CE, EMC and RoHS documentation supplied with every unit":"CE-, EMV- und RoHS-Unterlagen zu jeder Einheit",
-    "EU warehousing — no 12-week container wait on repeats":"EU-Lager — keine 12 Wochen Containerwartezeit bei Nachbestellungen",
-    "2-year warranty, 5 years of spare-part availability":"2 Jahre Garantie, 5 Jahre Ersatzteilverfügbarkeit",
-    "On-site service in DACH, remote diagnostics elsewhere":"Vor-Ort-Service in der DACH-Region, Ferndiagnose darüber hinaus",
-    "Logistics":"Logistik",
-    "Warranty":"Garantie",
-    "Included with every order":"In jeder Bestellung enthalten",
-    "Ask about terms":"Konditionen anfragen",
-    "Open":"Offen",
-    "Collaboration":"Kooperation",
-    "If you manufacture, install or resell in the DACH region, there is a version of this that works for both of us. Three ways in, all of them written down before anyone ships anything.":"Wenn Sie in der DACH-Region fertigen, installieren oder wiederverkaufen, gibt es eine Variante, die für beide Seiten funktioniert. Drei Wege hinein, alle schriftlich fixiert, bevor irgendetwas verschickt wird.",
-    "Talk about a partnership":"Über eine Partnerschaft sprechen",
-    "OEM & white label":"OEM & White Label",
-    "Our panels and optics under your badge, with your packaging, manual and firmware splash. Minimum run of ten units.":"Unsere Panels und Optiken unter Ihrer Marke, mit Ihrer Verpackung, Anleitung und Firmware-Splash. Mindestserie zehn Einheiten.",
-    "Distribution":"Vertrieb",
-    "Regional resale with protected territory, dealer pricing, demo stock and technical training for your sales team.":"Regionaler Wiederverkauf mit geschütztem Gebiet, Händlerpreisen, Demobestand und technischer Schulung für Ihr Vertriebsteam.",
-    "Joint development":"Gemeinsame Entwicklung",
-    "You bring the application and the test site, we bring the engineering. Costs and rights agreed in writing up front.":"Sie bringen die Anwendung und den Teststandort, wir bringen das Engineering. Kosten und Rechte werden vorab schriftlich geregelt.",
-
-    "Data":"Daten",
-    "AI":"KI",
-
-    "How a project runs":"Wie ein Projekt läuft",
-    "Four stages,":"Vier Phasen,",
-    "in this order":"in dieser Reihenfolge",
-    "Scope":"Scoping",
-    "We interview whoever owns the problem, audit what exists, and write the scope. You get a fixed price and a date.":"Wir sprechen mit denen, denen das Problem gehört, prüfen den Bestand und schreiben den Umfang auf. Sie bekommen einen Festpreis und ein Datum.",
-    "1–2 weeks":"1–2 Wochen",
-    "Direction first, then screens. You see real content in the design, never lorem ipsum, and you review every week.":"Erst die Richtung, dann die Screens. Sie sehen echte Inhalte im Design, nie Lorem Ipsum, und prüfen jede Woche.",
-    "2–5 weeks":"2–5 Wochen",
-    "Build":"Umsetzung",
-    "The same team writes the code. You get a staging link from week one and watch it fill in, so nothing is a surprise.":"Dasselbe Team schreibt den Code. Ab Woche eins gibt es einen Staging-Link, den Sie mitwachsen sehen — nichts ist eine Überraschung.",
-    "4–12 weeks":"4–12 Wochen",
-    "Run":"Betrieb",
-    "Launch, then 30 days of fixes included. After that you take it in-house or we stay on a retainer. Your call.":"Launch, danach 30 Tage Fehlerbehebung inklusive. Anschließend übernehmen Sie intern oder wir bleiben im Retainer. Ihre Entscheidung.",
-    "Ongoing":"Laufend",
-
-    "Projects shipped since 2019":"Projekte seit 2019 ausgeliefert",
-    "Industries, from logistics to healthcare":"Branchen, von Logistik bis Gesundheitswesen",
-    "Weeks, median scope to launch":"Wochen, im Median von Scoping bis Launch",
-    "Built in-house, never subcontracted":"Im Haus gebaut, nie fremdvergeben",
-
-    "Ways to work with us":"Wie Sie mit uns arbeiten",
-    "Pick the size":"Wählen Sie die Größe",
-    "of the problem":"des Problems",
-    "Two focused weeks on one question: a rebrand direction, a prototype, an audit of what you already have.":"Zwei fokussierte Wochen für eine Frage: eine Marken-Richtung, ein Prototyp, ein Audit dessen, was Sie schon haben.",
-    "Kickoff, two reviews, one handover":"Kickoff, zwei Reviews, eine Übergabe",
-    "Figma files and a written recommendation":"Figma-Dateien und eine schriftliche Empfehlung",
-    "No commitment past the two weeks":"Keine Verpflichtung über die zwei Wochen hinaus",
-    "From €3,200 · fixed":"Ab 3.200 € · Festpreis",
-    "Track B · most chosen":"Track B · am häufigsten gewählt",
-    "The full run. Scope, design, build, launch — one team, one price, one date.":"Der volle Durchlauf. Scoping, Design, Umsetzung, Launch — ein Team, ein Preis, ein Termin.",
-    "Weekly reviews on a live staging link":"Wöchentliche Reviews an einem Live-Staging-Link",
-    "Design system, source code, and docs":"Designsystem, Quellcode und Dokumentation",
-    "30 days of post-launch fixes included":"30 Tage Fehlerbehebung nach dem Launch inklusive",
-    "From €12,000 · fixed scope":"Ab 12.000 € · fester Umfang",
-    "A standing slice of our week for teams shipping continuously. Design and engineering on tap.":"Ein fester Anteil unserer Woche für Teams, die laufend ausliefern. Design und Engineering auf Abruf.",
-    "Reserved days each month, rolled over if unused":"Reservierte Tage pro Monat, übertragbar wenn ungenutzt",
-    "Shared board, same-day answers":"Gemeinsames Board, Antworten am selben Tag",
-    "Monthly, cancel with 30 days' notice":"Monatlich, kündbar mit 30 Tagen Frist",
-    "From €2,400 / month":"Ab 2.400 € / Monat",
-
-    "Questions":"Fragen",
-    "Before":"Bevor Sie",
-    "you write":"schreiben",
-    "If yours isn't here, ask it in the form below. We answer within one working day.":"Wenn Ihre nicht dabei ist, stellen Sie sie im Formular unten. Wir antworten innerhalb eines Werktags.",
-    "What does a project cost?":"Was kostet ein Projekt?",
-    "Most full builds land between €12,000 and €60,000 depending on scope. We quote a fixed price after the scoping stage, so you're never approving an open-ended hourly bill. Smaller sprints start at €3,200.":"Die meisten kompletten Projekte liegen je nach Umfang zwischen 12.000 € und 60.000 €. Wir nennen nach dem Scoping einen Festpreis, damit Sie nie eine offene Stundenrechnung freigeben. Kleinere Sprints starten bei 3.200 €.",
-    "How fast can you start?":"Wie schnell können Sie starten?",
-    "Scoping usually starts within two weeks of signing. Build slots are booked four to six weeks out. If you have a hard deadline, say so in your first message and we'll tell you straight away whether it's possible.":"Das Scoping startet meist innerhalb von zwei Wochen nach Vertragsschluss. Umsetzungsslots sind vier bis sechs Wochen im Voraus belegt. Wenn Sie einen harten Termin haben, schreiben Sie ihn in die erste Nachricht — wir sagen sofort, ob er machbar ist.",
-    "Do you work with our in-house team?":"Arbeiten Sie mit unserem internen Team?",
-    "Often. We can take a whole project, or drop into your repository and board and work alongside your developers. We'll match your stack, your review process, and your definition of done.":"Oft. Wir übernehmen ein ganzes Projekt oder steigen in Ihr Repository und Board ein und arbeiten neben Ihren Entwicklern. Wir passen uns Ihrem Stack, Ihrem Review-Prozess und Ihrer Definition of Done an.",
-    "Who owns the code and design files?":"Wem gehören Code und Designdateien?",
-    "You do, from the first commit. Repositories, design files, domains and hosting accounts are in your name and transfer at handover with documentation. We don't hold anything hostage.":"Ihnen, ab dem ersten Commit. Repositories, Designdateien, Domains und Hosting-Konten laufen auf Ihren Namen und gehen bei der Übergabe mit Dokumentation über. Wir halten nichts zurück.",
-    "Is everything GDPR-compliant?":"Ist alles DSGVO-konform?",
-    "Yes. We build with EU hosting by default, write the Impressum and privacy notice with you, and keep a processing agreement on file. For AI features we can run models on infrastructure you control so nothing leaves your environment.":"Ja. Wir bauen standardmäßig mit EU-Hosting, schreiben Impressum und Datenschutzerklärung gemeinsam mit Ihnen und führen einen Auftragsverarbeitungsvertrag. Für KI-Funktionen können wir Modelle auf Ihrer eigenen Infrastruktur betreiben, sodass nichts Ihre Umgebung verlässt.",
-    "What happens after launch?":"Was passiert nach dem Launch?",
-    "Thirty days of fixes are included in every build. After that you either take it in-house — we run a handover session and leave written docs — or move onto the Partner track for ongoing work.":"Dreißig Tage Fehlerbehebung sind in jedem Projekt enthalten. Danach übernehmen Sie entweder intern — wir machen eine Übergabesession und hinterlassen schriftliche Doku — oder wechseln für laufende Arbeit auf den Partner-Track.",
-
-    "Tell us":"Sagen Sie uns,",
-    "what's broken":"was klemmt",
-    "A paragraph is enough to start. If it's not a fit we'll say so quickly and point you somewhere better.":"Ein Absatz reicht für den Anfang. Wenn es nicht passt, sagen wir das schnell und verweisen Sie an eine bessere Adresse.",
-    "Book a 20-minute call":"20-Minuten-Termin buchen",
-    "Your name":"Ihr Name",
-    "Company":"Unternehmen",
-    "Email":"E-Mail",
-    "What do you need?":"Was brauchen Sie?",
-    "Brand":"Marke",
-    "Web build":"Web-Projekt",
-    "Data / AI":"Daten / KI",
-    "3D / motion":"3D / Motion",
-    "Beamer / projection":"Beamer / Projektion",
-    "LED display":"LED-Display",
-    "Partnership":"Partnerschaft",
-    "Not sure yet":"Noch unklar",
-    "Budget range":"Budgetrahmen",
-    "Under €10k":"Unter 10.000 €",
-    "€10–30k":"10.000–30.000 €",
-    "€30–60k":"30.000–60.000 €",
-    "€60k+":"Über 60.000 €",
-    "What's the project?":"Worum geht es?",
-    "Send it":"Absenden",
-    "We reply within one working day. Your details stay with us and are never sold or shared.":"Wir antworten innerhalb eines Werktags. Ihre Daten bleiben bei uns und werden nie verkauft oder weitergegeben.",
-    "Message ready":"Nachricht bereit",
-    "This is a demo form — connect it to your inbox or form service and it'll send for real.":"Dies ist ein Demo-Formular — verbinden Sie es mit Ihrem Postfach oder Formulardienst, dann wird wirklich gesendet.",
-
-    "A design and development studio. Same team from the first sketch to the last deploy.":"Ein Studio für Design und Entwicklung. Dasselbe Team vom ersten Strich bis zum letzten Deploy.",
-    "Contact":"Kontakt",
-    "Careers":"Karriere",
-    "Legal":"Rechtliches",
-    "Terms":"AGB",
-    "Cookie settings":"Cookie-Einstellungen",
-    "Back to top ↑":"Nach oben ↑",
-    "Back to top":"Nach oben",
-
-    /* attributes */
-    "DDC home":"DDC Startseite",
-    "Open menu":"Menü öffnen",
-    "Drag to compare the design and the build":"Ziehen, um Design und Umsetzung zu vergleichen",
-    "Testimonial 1":"Stimme 1",
-    "Testimonial 2":"Stimme 2",
-    "Testimonial 3":"Stimme 3",
-    "Language":"Sprache",
-    "Jane Bauer":"Max Mustermann",
-    "Where you work":"Wo Sie arbeiten",
-    "you@company.com":"sie@unternehmen.de",
-    "What exists today, what should exist instead, and when you need it.":"Was heute existiert, was stattdessen existieren sollte und bis wann."
-  }
-};
-
-/* ---------- runtime ---------- */
-(function(){
-  "use strict";
-  var DICT = window.I18N.de;
-  var ATTRS = ["placeholder","aria-label","title","alt"];
-  var SKIP_TAGS = {SCRIPT:1,STYLE:1,NOSCRIPT:1};
-  var SKIP_SEL = "#manifesto, #quote";     /* handled separately */
-  var texts = [], attrs = [], lang = "en";
-
-  function norm(s){ return s.replace(/\s+/g," ").trim(); }
-
-  function collect(){
-    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: function(n){
-        var p = n.parentElement;
-        if (!p || SKIP_TAGS[p.tagName]) return NodeFilter.FILTER_REJECT;
-        if (p.closest(SKIP_SEL)) return NodeFilter.FILTER_REJECT;
-        return norm(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-      }
-    });
-    var n;
-    while ((n = w.nextNode())) texts.push({ node:n, en:n.nodeValue, key:norm(n.nodeValue) });
-
-    ATTRS.forEach(function(a){
-      document.querySelectorAll("["+a+"]").forEach(function(el){
-        var v = el.getAttribute(a);
-        if (norm(v)) attrs.push({ el:el, a:a, en:v, key:norm(v) });
-      });
-    });
-  }
-
-  function apply(to){
-    texts.forEach(function(t){
-      t.node.nodeValue = (to === "de" && DICT[t.key]) ? DICT[t.key] : t.en;
-    });
-    attrs.forEach(function(t){
-      t.el.setAttribute(t.a, (to === "de" && DICT[t.key]) ? DICT[t.key] : t.en);
-    });
-    var m = window.I18N.meta[to];
-    document.title = m.title;
-    var d = document.querySelector('meta[name="description"]');
-    if (d) d.setAttribute("content", m.desc);
-    document.documentElement.lang = to;
-    if (window.__rebuildManifesto) window.__rebuildManifesto();
-    if (window.__refreshQuote) window.__refreshQuote();
-    document.querySelectorAll("#lang .lang__b").forEach(function(b){
-      var on = b.getAttribute("data-lang") === to;
-      b.classList.toggle("is-on", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-    lang = to;
-    try { localStorage.setItem("ddc-lang", to); } catch(e){}
-  }
-
-  function boot(){
-    collect();
-    var saved = null;
-    try { saved = localStorage.getItem("ddc-lang"); } catch(e){}
-    if (!saved && (navigator.language || "").toLowerCase().indexOf("de") === 0) saved = "de";
-    document.querySelectorAll("#lang .lang__b").forEach(function(b){
-      b.addEventListener("click", function(){ apply(b.getAttribute("data-lang")); });
-    });
-    if (saved === "de") apply("de");
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-  else boot();
-})();
+  const btnDe = document.getElementById('btn-de');
+  const btnEn = document.getElementById('btn-en');
+  btnDe.addEventListener('click', () => {
+    document.body.classList.remove('lang-en');
+    document.documentElement.lang = 'de';
+    btnDe.classList.add('active');
+    btnEn.classList.remove('active');
+  });
+  btnEn.addEventListener('click', () => {
+    document.body.classList.add('lang-en');
+    document.documentElement.lang = 'en';
+    btnEn.classList.add('active');
+    btnDe.classList.remove('active');
+  });
 </script>
 
-<script>
-(function(){
-  "use strict";
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* ---------- 1. Hero seam ---------- */
-  var stage = document.getElementById("stage");
-  var seam  = document.getElementById("seam");
-  var grip  = document.getElementById("grip");
-  var target = 52, current = 52, dragging = false, raf = null;
-
-  function setSeam(pct){
-    pct = Math.max(4, Math.min(96, pct));
-    document.documentElement.style.setProperty("--seam", pct + "%");
-  }
-  function loop(){
-    current += (target - current) * 0.12;
-    setSeam(current);
-    if (Math.abs(target - current) > 0.05) { raf = requestAnimationFrame(loop); }
-    else { setSeam(target); raf = null; }
-  }
-  function nudge(pct){
-    target = Math.max(4, Math.min(96, pct));
-    if (reduce) { current = target; setSeam(target); return; }
-    if (!raf) raf = requestAnimationFrame(loop);
-  }
-  function pctFromEvent(e){
-    var r = stage.getBoundingClientRect();
-    var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
-    return (x / r.width) * 100;
-  }
-
-  if (stage){
-    stage.addEventListener("pointermove", function(e){
-      if (window.innerWidth < 860 && !dragging) return;
-      nudge(pctFromEvent(e));
-    });
-    stage.addEventListener("pointerdown", function(e){
-      dragging = true; stage.setPointerCapture(e.pointerId); nudge(pctFromEvent(e));
-    });
-    stage.addEventListener("pointerup", function(){ dragging = false; });
-    stage.addEventListener("pointerleave", function(){ if(!dragging) nudge(52); });
-
-    grip.addEventListener("keydown", function(e){
-      if (e.key === "ArrowLeft"){ e.preventDefault(); nudge(target - 6); }
-      if (e.key === "ArrowRight"){ e.preventDefault(); nudge(target + 6); }
-    });
-
-    /* opening sweep */
-    if (reduce){ document.body.classList.add("lit"); setSeam(52); }
-    else {
-      setSeam(100); current = 100; 
-      setTimeout(function(){ document.body.classList.add("lit"); }, 120);
-      setTimeout(function(){ nudge(52); }, 900);
-    }
-  }
-
-  /* ---------- 2. Nav ---------- */
-  var nav = document.getElementById("nav");
-  var progress = document.getElementById("progress");
-  function onScroll(){
-    var y = window.scrollY;
-    nav.classList.toggle("is-stuck", y > 40);
-    var h = document.body.scrollHeight - window.innerHeight;
-    progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
-  }
-  window.addEventListener("scroll", onScroll, {passive:true});
-  onScroll();
-
-  var burger = document.getElementById("burger");
-  burger.addEventListener("click", function(){
-    var open = document.body.classList.toggle("menu-open");
-    burger.setAttribute("aria-expanded", String(open));
-  });
-  document.querySelectorAll("#navLinks a").forEach(function(a){
-    a.addEventListener("click", function(){
-      document.body.classList.remove("menu-open");
-      burger.setAttribute("aria-expanded","false");
-    });
-  });
-
-  /* ---------- 3. Scroll reveals ---------- */
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
-    });
-  }, {threshold:0.16, rootMargin:"0px 0px -8% 0px"});
-  document.querySelectorAll(".rise").forEach(function(el){ io.observe(el); });
-
-  /* ---------- 4. Manifesto word-by-word ---------- */
-  var man = document.querySelector("#manifesto [data-split]");
-  if (man){
-    var mio = null;
-    window.__rebuildManifesto = function(){
-      var L  = document.documentElement.lang === "de" ? "de" : "en";
-      var src = (window.I18N && window.I18N.manifesto) ? window.I18N.manifesto[L] : man.textContent;
-      var hl  = (window.I18N && window.I18N.manifestoHl) ? window.I18N.manifestoHl[L] : /gap|removes|One|team/;
-      var lit = man.querySelector(".w.on") !== null;
-      man.innerHTML = src.trim().split(/\s+/).map(function(w){
-        return '<span class="w'+(hl.test(w)?" hl":"")+(lit?" on":"")+'">'+w+'</span>';
-      }).join(" ");
-      if (mio) mio.disconnect();
-      if (lit) return;
-      var spans = man.querySelectorAll(".w");
-      mio = new IntersectionObserver(function(en){
-        if (!en[0].isIntersecting) return;
-        spans.forEach(function(s,i){ setTimeout(function(){ s.classList.add("on"); }, reduce ? 0 : i*26); });
-        mio.disconnect();
-      }, {threshold:0.35});
-      mio.observe(man);
-    };
-    window.__rebuildManifesto();
-  }
-
-  /* ---------- 5. Capability panels ---------- */
-  document.querySelectorAll("[data-panel]").forEach(function(p){
-    function open(){
-      document.querySelectorAll("[data-panel]").forEach(function(o){ o.classList.remove("is-open"); });
-      p.classList.add("is-open");
-    }
-    p.addEventListener("click", open);
-    p.addEventListener("mouseenter", function(){ if(window.innerWidth > 860) open(); });
-  });
-
-  /* ---------- 6. Counters ---------- */
-  document.querySelectorAll("[data-count]").forEach(function(el){
-    var end = parseInt(el.getAttribute("data-count"), 10);
-    var cio = new IntersectionObserver(function(en){
-      if (!en[0].isIntersecting) return;
-      cio.disconnect();
-      if (reduce){ el.textContent = end; return; }
-      var t0 = performance.now(), dur = 1500;
-      (function tick(now){
-        var p = Math.min((now - t0)/dur, 1);
-        el.textContent = Math.round(end * (1 - Math.pow(1-p, 3)));
-        if (p < 1) requestAnimationFrame(tick);
-      })(t0);
-    }, {threshold:0.5});
-    cio.observe(el);
-  });
-
-  /* ---------- 7. Testimonials ---------- */
-  var quotesEN = [
-    {t:"They sent one team and it stayed the same team for five months. That has never happened to us before.", n:"Marit Røed", r:"Head of Operations · Halden Logistics", i:"MR"},
-    {t:"The configurator closed three deals in its first month. Our sales calls got twenty minutes shorter.", n:"Tomáš Král", r:"Sales Director · Rolling FAST", i:"TK"},
-    {t:"We had four versions of the truth. Now we have one, and the plant managers actually open it.", n:"Andrea Fuchs", r:"Head of BI · Nordhaus Werke", i:"AF"}
-  ];
-  function quoteSet(){
-    var L = document.documentElement.lang === "de" ? "de" : "en";
-    return (window.I18N && window.I18N.quotes && window.I18N.quotes[L]) || quotesEN;
-  }
-  var qi = 0, qT = document.getElementById("qText"), qN = document.getElementById("qName"),
-      qR = document.getElementById("qRole"), qIni = document.getElementById("qIni"),
-      dots = document.querySelectorAll("#qNav .qdot");
-  function showQuote(i){
-    qi = i; var q = quoteSet()[i];
-    var b = qT.closest("blockquote");
-    b.style.transition = "opacity .3s"; b.style.opacity = "0";
-    setTimeout(function(){
-      qT.textContent = q.t; qN.textContent = q.n; qR.textContent = q.r; qIni.textContent = q.i;
-      b.style.opacity = "1";
-    }, reduce ? 0 : 300);
-    dots.forEach(function(d,j){ d.classList.toggle("on", j === i); });
-  }
-  dots.forEach(function(d,j){ d.addEventListener("click", function(){ showQuote(j); clearInterval(auto); }); });
-  var auto = setInterval(function(){ showQuote((qi+1) % quoteSet().length); }, 7000);
-  window.__refreshQuote = function(){
-    var q = quoteSet()[qi];
-    qT.textContent = q.t; qN.textContent = q.n; qR.textContent = q.r; qIni.textContent = q.i;
-  };
-
-  /* ---------- 8. FAQ accordion ---------- */
-  document.querySelectorAll(".acc__item").forEach(function(item){
-    var btn = item.querySelector(".acc__btn"), panel = item.querySelector(".acc__panel");
-    btn.addEventListener("click", function(){
-      var isOpen = item.classList.contains("open");
-      document.querySelectorAll(".acc__item").forEach(function(o){
-        o.classList.remove("open"); o.querySelector(".acc__panel").style.maxHeight = null;
-      });
-      if (!isOpen){ item.classList.add("open"); panel.style.maxHeight = panel.scrollHeight + "px"; }
-    });
-  });
-
-  /* ---------- 9. Chips + form ---------- */
-  document.querySelectorAll("#chipsNeed .chip, #chipsBudget .chip").forEach(function(c){
-    c.addEventListener("click", function(){
-      if (c.parentElement.id === "chipsBudget"){
-        c.parentElement.querySelectorAll(".chip").forEach(function(o){ o.classList.remove("on"); });
-      }
-      c.classList.toggle("on");
-    });
-  });
-  document.getElementById("send").addEventListener("click", function(){
-    document.getElementById("sent").classList.add("show");
-  });
-
-  /* ---------- 10. Smooth anchors ---------- */
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    a.addEventListener("click", function(e){
-      var el = document.querySelector(a.getAttribute("href"));
-      if (!el) return;
-      e.preventDefault();
-      el.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
-    });
-  });
-})();
-</script>
 </body>
 </html>
