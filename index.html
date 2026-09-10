@@ -6,17 +6,18 @@
 <title>DDC Produktentwicklung</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B0D10;
-    --surface:#14171B;
-    --surface-2:#1B1F24;
-    --line:#262B31;
-    --text:#E8EAED;
-    --muted:#8B92A0;
-    --accent:#5EEAD4;
-    --accent-dim:#2E7C71;
+    --bg:#FFFFFF;
+    --surface:#F4F7FC;
+    --surface-2:#EAF1FA;
+    --line:#DCE4EF;
+    --text:#151B24;
+    --muted:#5A6472;
+    --accent:#1E63E9;
+    --accent-dim:#1A55C8;
+    --menu:#DBE7F8;
     --amber:#F5A623;
     --radius:2px;
     --maxw:1240px;
@@ -29,7 +30,8 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Inter',sans-serif;
+    font-family:'Montserrat',sans-serif;
+    letter-spacing:0.012em;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
@@ -66,9 +68,10 @@
     position:fixed;
     top:0;left:0;right:0;
     z-index:100;
-    background:#FFFFFF;
-    border-top:3px solid var(--accent-dim);
-    border-bottom:1px solid #E4E7EA;
+    background:linear-gradient(180deg,#E8F0FC 0%, var(--menu) 100%);
+    border-top:3px solid var(--accent);
+    border-bottom:1px solid #C8D6EC;
+    box-shadow:0 6px 24px rgba(20,45,95,0.07);
   }
 
   .nav-inner{
@@ -106,9 +109,10 @@
 
   nav.menu a{
     font-size:14px;
-    color:#4A5058;
+    color:#2A3A55;
     font-weight:600;
-    padding:6px 0;
+    letter-spacing:0.01em;
+    padding:6px 2px;
     position:relative;
     white-space:nowrap;
     transition:color .2s;
@@ -117,13 +121,14 @@
   nav.menu a::after{
     content:'';
     position:absolute;
-    left:0;bottom:0;
-    width:0;height:1px;
-    background:var(--accent-dim);
+    left:0;bottom:-2px;
+    width:0;height:2px;
+    border-radius:2px;
+    background:var(--accent);
     transition:width .25s;
   }
 
-  nav.menu a:hover{color:#0B0D10;}
+  nav.menu a:hover{color:var(--accent);}
   nav.menu a:hover::after{width:100%;}
 
 
@@ -203,9 +208,9 @@
   @media (max-width:920px){
     nav.menu{
       position:fixed;
-      top:104px;left:0;right:0;
-      background:#FFFFFF;
-      border-bottom:1px solid #E4E7EA;
+      top:84px;left:0;right:0;
+      background:var(--menu);
+      border-bottom:1px solid var(--line);
       flex-direction:column;
       align-items:flex-start;
       padding:20px clamp(20px,5vw,48px) 28px;
@@ -241,7 +246,7 @@
       to bottom,
       transparent 0,
       transparent 27px,
-      rgba(94,234,212,0.05) 28px
+      rgba(30,99,233,0.045) 28px
     );
     pointer-events:none;
   }
@@ -254,9 +259,9 @@
     height:100%;
     background:linear-gradient(100deg,
       transparent 0%,
-      rgba(94,234,212,0.06) 45%,
-      rgba(94,234,212,0.10) 50%,
-      rgba(94,234,212,0.06) 55%,
+      rgba(30,99,233,0.05) 45%,
+      rgba(30,99,233,0.08) 50%,
+      rgba(30,99,233,0.05) 55%,
       transparent 100%);
     transform:skewX(-15deg);
     animation:sweep 9s ease-in-out infinite;
@@ -341,11 +346,11 @@
 
   .btn-primary{
     background:var(--accent);
-    color:#06110F;
+    color:#FFFFFF;
   }
   .btn-primary:hover{
-    background:#7FF3E8;
-    box-shadow:0 0 24px rgba(94,234,212,0.35);
+    background:#3B7BF0;
+    box-shadow:0 6px 20px rgba(30,99,233,0.28);
   }
 
   .btn-ghost{
@@ -707,7 +712,7 @@
     border-radius:var(--radius);
     padding:13px 14px;
     color:var(--text);
-    font-family:'Inter',sans-serif;
+    font-family:'Montserrat',sans-serif;
     font-size:14px;
     transition:border-color .2s;
   }
@@ -739,7 +744,79 @@
   .footer-links a{color:var(--muted);}
   .footer-links a:hover{color:var(--accent);}
 
-  ::selection{background:var(--accent);color:#06110F;}
+  ::selection{background:var(--accent);color:#FFFFFF;}
+
+  /* =====================================================
+     3C-style restyle: white nav + navy hero + soft cards
+     ===================================================== */
+  :root{
+    --accent:#1E63E9;
+    --accent-dim:#1749B8;
+    --navy1:#173a86;
+    --navy2:#0e2657;
+    --ink:#16233f;
+    --soft:#F4F7FC;
+    --line:#E4E9F2;
+    --radius:8px;
+  }
+
+  h1,h2,h3,h4{font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
+
+  /* NAV — clean white bar */
+  header{background:#FFFFFF;border-top:none;border-bottom:1px solid var(--line);box-shadow:0 2px 14px rgba(15,30,70,0.06);}
+  .nav-inner{height:84px;}
+  nav.menu a{color:#33415C;font-weight:600;letter-spacing:0;}
+  nav.menu a:hover{color:var(--accent);}
+  nav.menu a::after{background:var(--accent);bottom:-3px;}
+  .brand-text .brand-name{color:#7A8BA6;}
+  .lang-toggle{border-color:#D8DFEA;}
+  .lang-toggle button{color:#5A6472;}
+  .lang-toggle button.active{background:var(--accent);color:#fff;}
+  .menu-btn{color:var(--ink);}
+  .nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;padding:11px 18px;border-radius:var(--radius);white-space:nowrap;transition:background .2s,box-shadow .2s;}
+  .nav-cta span{color:#fff;}
+  .nav-cta:hover{background:#1a54c8;box-shadow:0 6px 18px rgba(30,99,233,0.30);}
+  @media (max-width:920px){ .nav-cta{display:none;} nav.menu{background:#FFFFFF;} }
+
+  /* HERO — deep navy block */
+  .hero{background:linear-gradient(135deg,var(--navy1) 0%,var(--navy2) 100%);border-bottom:none;}
+  .hero .scan-grid{opacity:.35;}
+  .hero .beam{opacity:.5;}
+  .eyebrow{color:#9DBBFF;}
+  .eyebrow::before{background:#9DBBFF;opacity:.9;}
+  .hero h1,.hero h1 span{color:#FFFFFF;}
+  .lead-copy p{color:#C6D3EC;}
+  .lead-copy p.slogan{color:#9DBBFF;}
+  .hero-specs{display:none;}
+  .hero-tags{margin-top:34px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.16);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.02em;color:#9FB2D6;max-width:760px;}
+
+  /* BUTTONS */
+  .btn{border-radius:var(--radius);padding:15px 26px;font-weight:700;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:#1a54c8;box-shadow:0 8px 22px rgba(30,99,233,0.30);}
+  .hero .btn-ghost{border-color:rgba(255,255,255,0.45);color:#fff;}
+  .hero .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,0.08);color:#fff;}
+
+  /* SECTIONS — alternating soft grey, no hard dividers */
+  section{border-bottom:none;}
+  #ueber-uns,#dienstleister,#referenzen{background:var(--soft);}
+  .section-tag{color:var(--accent);}
+
+  /* CARDS — white, rounded, soft shadow, hover lift */
+  .service-grid{background:transparent;border:none;gap:24px;}
+  .service-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(20,40,90,0.05);transition:transform .2s,box-shadow .2s;}
+  .service-card:hover{background:#fff;transform:translateY(-4px);box-shadow:0 14px 32px rgba(20,40,90,0.12);}
+  .service-icon{background:#E8F0FE;border:none;color:var(--accent);border-radius:10px;width:46px;height:46px;font-size:15px;}
+  .project-card{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 6px 20px rgba(20,40,90,0.05);transition:transform .2s,box-shadow .2s;}
+  .project-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(20,40,90,0.12);}
+  .project-thumb{background:#EEF3FB;}
+  .about-media{border-radius:14px;background:#EEF3FB;}
+  .logo-strip{border-radius:12px;overflow:hidden;}
+  .quote-block{border-left-color:var(--accent);}
+
+  /* FORM inputs */
+  input,textarea{border-radius:8px;background:#fff;border-color:var(--line);}
+
 </style>
 </head>
 <body>
@@ -763,6 +840,7 @@
       <a href="#kontakt" data-de>Kontakt</a><a href="#kontakt" data-en>Contact</a>
     </nav>
     <div class="nav-right">
+      <a href="#kontakt" class="nav-cta"><span data-de>Projekt anfragen</span><span data-en>Start a project</span></a>
       <div class="lang-toggle">
         <button id="btn-de" class="active">DE</button>
         <button id="btn-en">EN</button>
@@ -773,12 +851,12 @@
 </header>
 
 <!-- ================= HERO / STARTSEITE ================= -->
-<section class="hero" id="startseite" style="border-bottom:1px solid var(--line);">
+<section class="hero" id="startseite">
   <div class="scan-grid"></div>
   <div class="beam"></div>
   <div class="wrap hero-inner">
     <span class="eyebrow"><span data-de>Produktentwicklung &amp; Engineering</span><span data-en>Product Development &amp; Engineering</span></span>
-    <h1><span data-de>DDC</span><span data-en>DDC</span> —<br><span>FJ Donner</span></h1>
+    <h1><span data-de>DDC</span><span data-en>DDC</span> — <span>FJ Donner</span></h1>
     <div class="lead-copy" data-de>
       <p>DDC entwickelt innovative Lösungen und Produkte in den Bereichen Mechanik und Mechatronik, KI-basierte Anwendungen sowie digitale Systeme. Darüber hinaus unterstützt DDC Unternehmen bei der Vermarktung und dem Einsatz großformatiger Displays und Big-Screen-Lösungen.</p>
       <p>Wir verbinden technisches Know-how, praktische Erfahrung und innovatives Denken, um komplexe Herausforderungen in zuverlässige und marktfähige Lösungen zu verwandeln.</p>
@@ -794,6 +872,10 @@
     <div class="cta-row">
       <a href="#kontakt" class="btn btn-primary"><span data-de>Projekt anfragen</span><span data-en>Start a project</span></a>
       <a href="#produktentwicklung" class="btn btn-ghost"><span data-de>Leistungen ansehen</span><span data-en>View services</span></a>
+    </div>
+    <div class="hero-tags">
+      <span data-de>Mechanik &nbsp;•&nbsp; Mechatronik &nbsp;•&nbsp; KI-Anwendungen &nbsp;•&nbsp; Digitale Systeme &nbsp;•&nbsp; Big-Screen-Lösungen</span>
+      <span data-en>Mechanics &nbsp;•&nbsp; Mechatronics &nbsp;•&nbsp; AI Applications &nbsp;•&nbsp; Digital Systems &nbsp;•&nbsp; Big-Screen Solutions</span>
     </div>
   </div>
   <div class="hero-specs">
