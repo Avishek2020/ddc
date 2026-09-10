@@ -817,6 +817,45 @@
   /* FORM inputs */
   input,textarea{border-radius:8px;background:#fff;border-color:var(--line);}
 
+
+  /* ===== Kontakt section (icon badges + soft form) ===== */
+  #kontakt{position:relative;overflow:hidden;background:linear-gradient(180deg,#FFFFFF 0%, #F4F7FC 100%);}
+  #kontakt .wrap{position:relative;z-index:1;}
+  #kontakt::after{content:'';position:absolute;right:-70px;top:70px;width:380px;height:380px;pointer-events:none;opacity:.5;transform:rotate(6deg);background-image:repeating-linear-gradient(0deg,rgba(30,99,233,0.08) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(30,99,233,0.08) 0 1px,transparent 1px 28px);}
+  @media (max-width:860px){ #kontakt::after{display:none;} }
+  .kontakt-head .head-rule{display:block;width:56px;height:3px;border-radius:2px;background:var(--accent);margin-top:16px;}
+
+  .contact-list{list-style:none;padding:0;margin:30px 0 0;display:grid;gap:20px;}
+  .contact-list li{display:flex;align-items:center;gap:16px;}
+  .ci-badge{flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:#E8F0FE;color:var(--accent);display:flex;align-items:center;justify-content:center;}
+  .ci-badge svg{width:20px;height:20px;}
+  .ci-text{display:flex;flex-direction:column;line-height:1.35;}
+  .ci-label{font-weight:700;color:var(--ink);font-size:14px;}
+  .ci-value{color:var(--muted);font-size:14px;margin-top:2px;}
+  .ci-value a{color:var(--muted);transition:color .2s;}
+  .ci-value a:hover{color:var(--accent);}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+  .contact-form .form-field{position:relative;}
+  .contact-form .fi{position:absolute;left:16px;top:16px;width:18px;height:18px;color:var(--accent);opacity:.85;pointer-events:none;}
+  .contact-form input,.contact-form textarea{background:#EEF2F8;border:1px solid transparent;border-radius:12px;padding:15px 16px 15px 46px;color:var(--ink);}
+  .contact-form input::placeholder,.contact-form textarea::placeholder{color:#93A0B4;}
+  .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(30,99,233,0.12);}
+  .contact-form textarea{min-height:130px;}
+  .btn-send{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;background:var(--accent);color:#fff;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:15px 30px;cursor:pointer;transition:background .2s,box-shadow .2s;}
+  .btn-send svg{width:18px;height:18px;}
+  .btn-send span{color:#fff;}
+  .btn-send:hover{background:#1a54c8;box-shadow:0 8px 22px rgba(30,99,233,0.30);}
+
+
+  /* ===== Hero headline accent + tagline ===== */
+  .hero h1{margin-bottom:16px;}
+  .hero h1 .hl-blue{color:#4C8DFF;}
+  .hero-tagline{font-family:'Montserrat',sans-serif;font-weight:500;font-size:clamp(19px,2.4vw,26px);line-height:1.35;color:#B9CCEA;margin:0 0 28px;max-width:640px;}
+  .hero-tagline[data-en]{display:none;}
+  body.lang-en .hero-tagline[data-de]{display:none;}
+  body.lang-en .hero-tagline[data-en]{display:block;}
+
 </style>
 </head>
 <body>
@@ -840,7 +879,6 @@
       <a href="#kontakt" data-de>Kontakt</a><a href="#kontakt" data-en>Contact</a>
     </nav>
     <div class="nav-right">
-      <a href="#kontakt" class="nav-cta"><span data-de>Projekt anfragen</span><span data-en>Start a project</span></a>
       <div class="lang-toggle">
         <button id="btn-de" class="active">DE</button>
         <button id="btn-en">EN</button>
@@ -856,7 +894,9 @@
   <div class="beam"></div>
   <div class="wrap hero-inner">
     <span class="eyebrow"><span data-de>Produktentwicklung &amp; Engineering</span><span data-en>Product Development &amp; Engineering</span></span>
-    <h1><span data-de>DDC</span><span data-en>DDC</span> — <span>FJ Donner</span></h1>
+    <h1><span class="hl-blue" data-de>DDC</span><span class="hl-blue" data-en>DDC</span> — <span>FJ Donner</span></h1>
+    <p class="hero-tagline" data-de>Ideen. Entwicklung. Realisierung.<br>Für eine bessere Zukunft.</p>
+    <p class="hero-tagline" data-en>Ideas. Development. Realization.<br>For a better future.</p>
     <div class="lead-copy" data-de>
       <p>DDC entwickelt innovative Lösungen und Produkte in den Bereichen Mechanik und Mechatronik, KI-basierte Anwendungen sowie digitale Systeme. Darüber hinaus unterstützt DDC Unternehmen bei der Vermarktung und dem Einsatz großformatiger Displays und Big-Screen-Lösungen.</p>
       <p>Wir verbinden technisches Know-how, praktische Erfahrung und innovatives Denken, um komplexe Herausforderungen in zuverlässige und marktfähige Lösungen zu verwandeln.</p>
@@ -1064,56 +1104,71 @@
 <!-- ================= KONTAKT ================= -->
 <section id="kontakt">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head kontakt-head">
       <div>
         <span class="section-tag">06 · <span data-de>Kontakt</span><span data-en>Contact</span></span>
         <h2><span data-de>Sprechen wir über Ihr Projekt</span><span data-en>Let's talk about your project</span></h2>
+        <span class="head-rule"></span>
       </div>
     </div>
     <div class="contact-grid">
       <div class="contact-info">
         <p><span data-de>Haben Sie ein Projekt oder eine Idee? Schreiben Sie uns – wir melden uns kurzfristig bei Ihnen.</span><span data-en>Have a project or an idea? Get in touch – we'll get back to you shortly.</span></p>
-        <dl>
-          <div>
-            <dt data-de>Ansprechpartner</dt><dt data-en>Contact</dt>
-            <dd>Franz Donner</dd>
-          </div>
-          <div>
-            <dt data-de>E-Mail</dt><dt data-en>Email</dt>
-            <dd><a href="mailto:fj-donner@projecttechnic.de">fj-donner@projecttechnic.de</a></dd>
-          </div>
-          <div>
-            <dt data-de>Telefon</dt><dt data-en>Phone</dt>
-            <dd><a href="tel:+4917559 41367">+49 175 59 41 367</a></dd>
-          </div>
-          <div>
-            <dt data-de>Adresse</dt><dt data-en>Address</dt>
-            <dd>Von-Bodelschwingh-Str. 14<br>33175 Bad Lippspringe<br><span data-de>Deutschland</span><span data-en>Germany</span></dd>
-          </div>
-        </dl>
+        <ul class="contact-list">
+          <li>
+            <span class="ci-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            <div class="ci-text">
+              <span class="ci-label" data-de>Ansprechpartner</span><span class="ci-label" data-en>Contact</span>
+              <span class="ci-value">Franz Donner</span>
+            </div>
+          </li>
+          <li>
+            <span class="ci-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+            <div class="ci-text">
+              <span class="ci-label">E-Mail</span>
+              <span class="ci-value"><a href="mailto:fj-donner@projecttechnic.de">fj-donner@projecttechnic.de</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="ci-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v3a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg></span>
+            <div class="ci-text">
+              <span class="ci-label" data-de>Telefon</span><span class="ci-label" data-en>Phone</span>
+              <span class="ci-value"><a href="tel:+491755941367">+49 175 59 41 367</a></span>
+            </div>
+          </li>
+          <li>
+            <span class="ci-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <div class="ci-text">
+              <span class="ci-label" data-de>Adresse</span><span class="ci-label" data-en>Address</span>
+              <span class="ci-value">Von-Bodelschwingh-Str. 14, 33175 Bad Lippspringe</span>
+            </div>
+          </li>
+        </ul>
       </div>
-      <form onsubmit="event.preventDefault();">
+      <form class="contact-form" onsubmit="event.preventDefault();">
         <div class="form-row">
-          <div>
-            <label data-de>Name</label><label data-en>Name</label>
-            <input type="text" placeholder="[…]">
+          <div class="form-field">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            <label class="sr-only" for="cf-name">Name</label>
+            <input id="cf-name" type="text" data-ph-de="Name" data-ph-en="Name" placeholder="Name">
           </div>
-          <div>
-            <label data-de>E-Mail</label><label data-en>Email</label>
-            <input type="email" placeholder="[…]">
+          <div class="form-field">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+            <label class="sr-only" for="cf-mail">E-Mail</label>
+            <input id="cf-mail" type="email" data-ph-de="E-Mail" data-ph-en="Email" placeholder="E-Mail">
           </div>
         </div>
-        <div>
-          <label data-de>Unternehmen</label><label data-en>Company</label>
-          <input type="text" placeholder="[…]">
+        <div class="form-field">
+          <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h.01M15 7h.01M9 11h.01M15 11h.01M9 15h6"/></svg></span>
+          <label class="sr-only" for="cf-comp" data-de>Unternehmen</label>
+          <input id="cf-comp" type="text" data-ph-de="Unternehmen" data-ph-en="Company" placeholder="Unternehmen">
         </div>
-        <div>
-          <label data-de>Nachricht</label><label data-en>Message</label>
-          <textarea placeholder="[…]"></textarea>
+        <div class="form-field">
+          <span class="fi fi-top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg></span>
+          <label class="sr-only" for="cf-msg" data-de>Nachricht</label>
+          <textarea id="cf-msg" data-ph-de="Ihre Nachricht" data-ph-en="Your message" placeholder="Ihre Nachricht"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
-          <span data-de>Nachricht senden</span><span data-en>Send message</span>
-        </button>
+        <button type="submit" class="btn-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg><span data-de>Nachricht senden</span><span data-en>Send message</span></button>
       </form>
     </div>
   </div>
@@ -1137,6 +1192,12 @@
   menuBtn.addEventListener('click', () => menu.classList.toggle('open'));
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
 
+  function setPlaceholders(lang){
+    document.querySelectorAll('[data-ph-de]').forEach(function(el){
+      el.placeholder = lang==='en' ? el.getAttribute('data-ph-en') : el.getAttribute('data-ph-de');
+    });
+  }
+  setPlaceholders('de');
   const btnDe = document.getElementById('btn-de');
   const btnEn = document.getElementById('btn-en');
   btnDe.addEventListener('click', () => {
@@ -1144,12 +1205,14 @@
     document.documentElement.lang = 'de';
     btnDe.classList.add('active');
     btnEn.classList.remove('active');
+    setPlaceholders('de');
   });
   btnEn.addEventListener('click', () => {
     document.body.classList.add('lang-en');
     document.documentElement.lang = 'en';
     btnEn.classList.add('active');
     btnDe.classList.remove('active');
+    setPlaceholders('en');
   });
 </script>
 
