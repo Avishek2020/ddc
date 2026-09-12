@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDC · Admin</title>
+<style>
+  :root{--accent:#1E63E9;--ink:#16233f;--muted:#5A6472;--line:#E4E9F2;--soft:#F4F7FC;--radius:10px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--soft);}
+  a{color:var(--accent);}
+  .hidden{display:none!important;}
+
+  /* login */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .login-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px rgba(20,40,90,.08);padding:34px;width:100%;max-width:380px;}
+  .login-card h1{font-size:20px;margin-bottom:6px;}
+  .login-card p{color:var(--muted);font-size:14px;margin-bottom:20px;}
+  label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;}
+  input,textarea{width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:12px 13px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff;}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,99,233,.12);}
+  textarea{min-height:96px;resize:vertical;line-height:1.5;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;border:none;border-radius:var(--radius);padding:12px 22px;cursor:pointer;transition:background .15s,box-shadow .15s;}
+  .btn:hover{background:#1a54c8;box-shadow:0 6px 18px rgba(30,99,233,.28);}
+  .btn:disabled{opacity:.6;cursor:default;}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);}
+  .btn.ghost:hover{background:var(--soft);box-shadow:none;}
+  .btn.danger{background:#fff;color:#c0392b;border:1px solid #f0c6c1;}
+  .btn.danger:hover{background:#fdf1f0;box-shadow:none;}
+  .err{color:#c0392b;font-size:13px;margin-top:12px;min-height:16px;}
+  .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1f2937;border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;font-weight:600;font-size:14px;text-decoration:none;transition:background .15s,box-shadow .15s;margin-bottom:6px;}
+  .gbtn:hover{background:#f7f9fc;box-shadow:0 4px 14px rgba(20,40,90,.08);}
+  .gbtn svg{width:18px;height:18px;}
+  .orsep{display:flex;align-items:center;text-align:center;color:var(--muted);font-size:12px;margin:16px 0 12px;}
+  .orsep::before,.orsep::after{content:'';flex:1;height:1px;background:var(--line);}
+  .orsep span{padding:0 12px;}
+
+  /* app shell */
+  .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+  .side{background:#fff;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:4px;}
+  .brand{font-weight:800;font-size:18px;letter-spacing:.02em;padding:6px 10px 18px;}
+  .brand span{color:var(--accent);}
+  .navbtn{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;background:none;border:none;color:#33415c;font-size:14px;font-weight:600;padding:11px 12px;border-radius:8px;cursor:pointer;width:100%;}
+  .navbtn:hover{background:var(--soft);}
+  .navbtn.active{background:#E8F0FE;color:var(--accent);}
+  .badge{background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;min-width:20px;text-align:center;}
+  .side .spacer{flex:1;}
+  .main{padding:34px clamp(20px,4vw,48px);max-width:960px;}
+  .main h2{font-size:24px;margin-bottom:4px;}
+  .main .sub{color:var(--muted);font-size:14px;margin-bottom:26px;}
+  .toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  /* content form */
+  .field{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+  .field > label.title{text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);font-weight:700;margin-bottom:12px;}
+  .bi{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:680px){.bi{grid-template-columns:1fr;} .app{grid-template-columns:1fr;} .side{flex-direction:row;flex-wrap:wrap;position:sticky;top:0;z-index:5;} .side .spacer{display:none;}}
+  .lang-tag{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block;}
+  .save-bar{position:sticky;bottom:0;background:linear-gradient(0deg,var(--soft) 70%,transparent);padding:16px 0;display:flex;gap:12px;align-items:center;}
+
+  /* messages */
+  .msg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;}
+  .msg.unread{border-left:3px solid var(--accent);}
+  .msg .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;}
+  .msg .who{font-weight:700;}
+  .msg .meta{color:var(--muted);font-size:13px;}
+  .msg .body{white-space:pre-wrap;color:#2c3444;font-size:14px;line-height:1.6;margin:10px 0 14px;}
+  .msg .row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;}
+  .pill.new{background:#E8F0FE;color:var(--accent);}
+  .pill.rep{background:#E7F6EC;color:#1c7a3f;}
+  .empty{color:var(--muted);font-size:14px;padding:30px 0;}
+  .imgctl{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:start;}
+  .imgprev{width:130px;height:96px;border:1px solid var(--line);border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;overflow:hidden;text-align:center;padding:4px;}
+  .imgprev img{max-width:100%;max-height:100%;object-fit:contain;}
+  .imgfields{display:flex;flex-direction:column;gap:8px;}
+  .imgrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .btn.small{padding:8px 14px;font-size:13px;}
+  .uphint{font-size:12px;color:var(--muted);}
+  @media(max-width:680px){.imgctl{grid-template-columns:1fr;}}
+  .litem{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#fff;}
+  .litem-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
+  .litem-t{font-weight:700;color:var(--ink);}
+  .litem-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .litem-field{margin-bottom:12px;}
+  .sublab{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;}
+  [data-addlist]{margin-top:2px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="login-wrap">
+  <div class="login-card">
+    <h1>DDC <span style="color:#1E63E9">Admin</span></h1>
+    <p>Sign in to manage website content and messages.</p>
+    <a id="googleBtn" class="gbtn hidden" href="/auth/google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.8 6.1C12.2 13.2 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.5 3-2.2 5.5-4.7 7.2l7.3 5.7c4.3-4 6.9-9.9 6.9-17.4z"/><path fill="#FBBC05" d="M10.3 28.6c-.5-1.5-.8-3-.8-4.6s.3-3.1.8-4.6l-7.8-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.5 10.7l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.3-5.7c-2 1.4-4.7 2.3-7.9 2.3-6.4 0-11.8-3.7-13.7-9.1l-7.8 6.1C6.4 42.6 14.6 48 24 48z"/></svg><span>Continue with Google</span></a>
+    <div id="orSep" class="orsep hidden"><span>or sign in with a password</span></div>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password">
+    <div style="margin-top:16px"><button class="btn" id="loginBtn">Sign in</button></div>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app hidden">
+  <aside class="side">
+    <div class="brand">DDC <span>·</span> Admin</div>
+    <div id="nav"></div>
+    <div class="spacer"></div>
+    <button class="navbtn" id="viewSite">↗ View website</button>
+    <button class="navbtn" id="logout">⎋ Log out</button>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+async function api(url, opts){ const r = await fetch(url, opts); if(!r.ok) throw await r.json().catch(()=>({error:r.statusText})); return r.json(); }
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2200); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+let SCHEMA=[], CONTENT={}, active='startseite', listState={};
+
+// ---------- auth ----------
+async function boot(){
+  try{ const info=await api('/api/authinfo'); if(info && info.google){ $('#googleBtn').classList.remove('hidden'); $('#orSep').classList.remove('hidden'); } }catch(e){}
+  const params=new URLSearchParams(location.search);
+  if(params.get('error')==='denied'){ $('#loginErr').textContent='That Google account is not authorized for admin access.'; }
+  const s = await api('/api/session');
+  if(s.authed){ enterApp(); } else { $('#login').classList.remove('hidden'); }
+}
+$('#loginBtn').addEventListener('click', login);
+$('#pw').addEventListener('keydown', e=>{ if(e.key==='Enter') login(); });
+async function login(){
+  $('#loginErr').textContent='';
+  try{ await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#pw').value})});
+       enterApp(); }
+  catch(e){ $('#loginErr').textContent = 'Wrong password. Try again.'; }
+}
+$('#logout').addEventListener('click', async ()=>{ await api('/api/logout',{method:'POST'}); location.reload(); });
+$('#viewSite').addEventListener('click', ()=> window.open('/', '_blank'));
+
+async function enterApp(){
+  $('#login').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  [SCHEMA, CONTENT] = await Promise.all([api('/api/schema'), api('/api/content')]);
+  buildNav();
+  select('startseite');
+}
+
+// ---------- nav ----------
+let unreadCount = 0;
+function buildNav(){
+  const nav = $('#nav'); nav.innerHTML='';
+  SCHEMA.forEach(sec=>{
+    const b=document.createElement('button'); b.className='navbtn'; b.dataset.id=sec.id;
+    b.textContent=sec.label; b.onclick=()=>select(sec.id); nav.appendChild(b);
+  });
+  const b=document.createElement('button'); b.className='navbtn'; b.dataset.id='__messages';
+  b.innerHTML='<span>Messages</span><span class="badge hidden" id="msgBadge">0</span>';
+  b.onclick=()=>select('__messages'); nav.appendChild(b);
+  const lb=document.createElement('button'); lb.className='navbtn'; lb.dataset.id='__legal';
+  lb.textContent='Legal Pages'; lb.onclick=()=>select('__legal'); nav.appendChild(lb);
+  refreshUnread();
+}
+async function refreshUnread(){
+  try{ const msgs=await api('/api/admin/messages'); unreadCount=msgs.filter(m=>!m.read).length;
+    const badge=$('#msgBadge'); if(badge){ badge.textContent=unreadCount; badge.classList.toggle('hidden', unreadCount===0);} }catch(e){}
+}
+function select(id){
+  active=id;
+  document.querySelectorAll('.navbtn').forEach(n=>n.classList.toggle('active', n.dataset.id===id));
+  if(id==='__messages') renderMessages(); else if(id==='__legal') renderLegalAdmin(); else renderSection(id);
+}
+
+// ---------- content editor ----------
+function renderSection(id){
+  const sec = SCHEMA.find(s=>s.id===id); if(!sec) return;
+  const main=$('#main');
+  let html = `<h2>${esc(sec.label)}</h2><div class="sub">Edit the text for this section. Changes go live for all visitors after you save.</div>`;
+  sec.fields.forEach(f=>{
+    if(f.type==='list'){
+      listState[f.key]=JSON.parse(JSON.stringify(Array.isArray(CONTENT[f.key])?CONTENT[f.key]:[]));
+      html += `<div class="field"><label class="title">${esc(f.label)}</label><div id="listhost_${f.key}"></div></div>`;
+      return;
+    }
+    const val = CONTENT[f.key];
+    html += `<div class="field"><label class="title">${esc(f.label)}</label>`;
+    if(f.bilingual){
+      const de = (val && typeof val==='object') ? val.de : '';
+      const en = (val && typeof val==='object') ? val.en : '';
+      html += `<div class="bi">
+        <div><span class="lang-tag">Deutsch</span>${inputFor(f,'de',de)}</div>
+        <div><span class="lang-tag">English</span>${inputFor(f,'en',en)}</div>
+      </div>`;
+    } else {
+      const v = (typeof val==='string') ? val : '';
+      html += inputFor(f,'',v);
+    }
+    html += `</div>`;
+  });
+  html += `<div class="save-bar"><button class="btn" id="saveBtn">Save changes</button></div>`;
+  main.innerHTML=html;
+  $('#saveBtn').onclick=()=>saveSection(sec);
+  sec.fields.filter(f=>f.type==='image').forEach(attachImage);
+  sec.fields.filter(f=>f.type==='list').forEach(renderListInto);
+}
+function attachImage(f){
+  const url=$(`#f_${f.key}`), prev=$(`#prev_${f.key}`), file=$(`#file_${f.key}`), clr=$(`#clr_${f.key}`), hint=$(`#hint_${f.key}`);
+  function refresh(){ const v=url.value.trim(); prev.innerHTML = v ? `<img src="${v}" alt="">` : 'No image'; }
+  url.addEventListener('input', refresh);
+  clr.addEventListener('click', ()=>{ url.value=''; refresh(); hint.textContent=''; });
+  file.addEventListener('change', async ()=>{
+    const fl=file.files[0]; if(!fl) return;
+    hint.textContent='Uploading…';
+    try{
+      const fd=new FormData(); fd.append('file', fl);
+      const r=await fetch('/api/admin/upload',{method:'POST',body:fd});
+      if(!r.ok) throw await r.json().catch(()=>({error:'upload failed'}));
+      const j=await r.json(); url.value=j.url; refresh(); hint.textContent='Uploaded ✓ — remember to Save';
+    }catch(e){ hint.textContent='Upload failed: '+((e&&e.error)||'error'); }
+    file.value='';
+  });
+}
+function inputFor(f, lang, value){
+  const id = `f_${f.key}${lang?'_'+lang:''}`;
+  if(f.type==='image'){
+    const v = esc(value||'');
+    return `<div class="imgctl">
+      <div class="imgprev" id="prev_${f.key}">${value?`<img src="${v}" alt="">`:'No image'}</div>
+      <div class="imgfields">
+        <input id="f_${f.key}" type="text" placeholder="Paste an image URL, or upload below" value="${v}">
+        <div class="imgrow">
+          <label class="btn ghost small">Upload image<input id="file_${f.key}" type="file" accept="image/*" style="display:none"></label>
+          <button type="button" class="btn ghost small" id="clr_${f.key}">Clear</button>
+          <span class="uphint" id="hint_${f.key}"></span>
+        </div>
+      </div>
+    </div>`;
+  }
+  if(f.type==='textarea') return `<textarea id="${id}">${esc(value)}</textarea>`;
+  return `<input id="${id}" type="text" value="${esc(value)}">`;
+}
+async function saveSection(sec){
+  const payload={};
+  sec.fields.forEach(f=>{
+    if(f.type==='list'){ syncList(f); payload[f.key]=listState[f.key]; }
+    else if(f.bilingual){ payload[f.key] = { de: $(`#f_${f.key}_de`).value, en: $(`#f_${f.key}_en`).value }; }
+    else { payload[f.key] = $(`#f_${f.key}`).value; }
+  });
+  const btn=$('#saveBtn'); btn.disabled=true;
+  try{ await api('/api/admin/content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    Object.assign(CONTENT, payload); toast('Saved — changes are live'); }
+  catch(e){ toast('Save failed: '+(e.error||'error')); }
+  finally{ btn.disabled=false; }
+}
+
+// ---------- repeatable list editor ----------
+function blankItem(f){ const o={}; f.item.forEach(sf=>{ o[sf.key]= sf.type==='image'?'':(sf.bilingual?{de:'',en:''}:''); }); return o; }
+function subInput(sf, lang, v){
+  const attrs='data-sub="'+sf.key+'"'+(lang?(' data-lang="'+lang+'"'):'');
+  if(sf.type==='textarea') return '<textarea '+attrs+'>'+esc(v)+'</textarea>';
+  return '<input '+attrs+' type="text" value="'+esc(v)+'">';
+}
+function itemHTML(f, item, idx){
+  let inner='';
+  f.item.forEach(sf=>{
+    inner+='<div class="litem-field"><label class="sublab">'+esc(sf.label)+'</label>';
+    if(sf.type==='image'){
+      const v=esc(item[sf.key]||'');
+      inner+='<div class="imgctl">'
+        +'<div class="imgprev" id="lp_'+f.key+'_'+idx+'">'+(item[sf.key]?('<img src="'+v+'">'):'No image')+'</div>'
+        +'<div class="imgfields">'
+          +'<input data-sub="'+sf.key+'" data-role="url" id="lu_'+f.key+'_'+idx+'" type="text" placeholder="Image URL or upload below" value="'+v+'">'
+          +'<div class="imgrow">'
+            +'<label class="btn ghost small">Upload image<input type="file" accept="image/*" style="display:none" id="lfile_'+f.key+'_'+idx+'"></label>'
+            +'<button type="button" class="btn ghost small" data-role="clr">Clear</button>'
+            +'<span class="uphint" id="lhint_'+f.key+'_'+idx+'"></span>'
+          +'</div>'
+        +'</div></div>';
+    } else if(sf.bilingual){
+      const de=(item[sf.key]||{}).de||'', en=(item[sf.key]||{}).en||'';
+      inner+='<div class="bi"><div><span class="lang-tag">Deutsch</span>'+subInput(sf,'de',de)+'</div><div><span class="lang-tag">English</span>'+subInput(sf,'en',en)+'</div></div>';
+    } else {
+      inner+=subInput(sf,'',item[sf.key]||'');
+    }
+    inner+='</div>';
+  });
+  const single=f.label.replace(/s$/,'');
+  return '<div class="litem" data-idx="'+idx+'"><div class="litem-head">'
+    +'<span class="litem-t">'+esc(single)+' '+(idx+1)+'</span>'
+    +'<span class="litem-actions">'
+      +'<button type="button" class="btn ghost small" data-act="up">↑</button>'
+      +'<button type="button" class="btn ghost small" data-act="down">↓</button>'
+      +'<button type="button" class="btn danger small" data-act="rm">Remove</button>'
+    +'</span></div>'+inner+'</div>';
+}
+function renderListInto(f){
+  const host=document.getElementById('listhost_'+f.key); if(!host) return;
+  const arr=listState[f.key]||[];
+  host.innerHTML='<div id="list_'+f.key+'">'+arr.map((it,i)=>itemHTML(f,it,i)).join('')+'</div>'
+    +'<button type="button" class="btn ghost" data-addlist="'+f.key+'">+ '+esc(f.addLabel||('Add '+f.label))+'</button>';
+  host.querySelector('[data-addlist]').onclick=()=>{ syncList(f); listState[f.key].push(blankItem(f)); renderListInto(f); };
+  host.querySelectorAll('.litem').forEach(el=>{
+    const idx=+el.getAttribute('data-idx');
+    el.querySelector('[data-act="rm"]').onclick=()=>{ syncList(f); listState[f.key].splice(idx,1); renderListInto(f); };
+    el.querySelector('[data-act="up"]').onclick=()=>{ if(idx>0){ syncList(f); const a=listState[f.key]; const t=a[idx-1]; a[idx-1]=a[idx]; a[idx]=t; renderListInto(f);} };
+    el.querySelector('[data-act="down"]').onclick=()=>{ syncList(f); const a=listState[f.key]; if(idx<a.length-1){ const t=a[idx+1]; a[idx+1]=a[idx]; a[idx]=t; renderListInto(f);} };
+    f.item.filter(sf=>sf.type==='image').forEach(sf=>{
+      const url=el.querySelector('[data-role="url"][data-sub="'+sf.key+'"]');
+      const prev=document.getElementById('lp_'+f.key+'_'+idx);
+      const file=document.getElementById('lfile_'+f.key+'_'+idx);
+      const hint=document.getElementById('lhint_'+f.key+'_'+idx);
+      const clr=el.querySelector('[data-role="clr"]');
+      const refresh=()=>{ const v=url.value.trim(); prev.innerHTML=v?('<img src="'+v+'">'):'No image'; };
+      url.addEventListener('input',refresh);
+      clr.addEventListener('click',()=>{ url.value=''; refresh(); if(hint)hint.textContent=''; });
+      file.addEventListener('change',async()=>{ const fl=file.files[0]; if(!fl)return; if(hint)hint.textContent='Uploading…';
+        try{ const fd=new FormData(); fd.append('file',fl); const r=await fetch('/api/admin/upload',{method:'POST',body:fd}); if(!r.ok) throw await r.json().catch(()=>({error:'upload failed'})); const j=await r.json(); url.value=j.url; refresh(); if(hint)hint.textContent='Uploaded ✓ — remember to Save'; }
+        catch(e){ if(hint)hint.textContent='Upload failed'; } file.value='';
+      });
+    });
+  });
+}
+function syncList(f){
+  const cont=document.getElementById('list_'+f.key); if(!cont) return;
+  const arr=[];
+  cont.querySelectorAll('.litem').forEach(it=>{
+    const obj={};
+    f.item.forEach(sf=>{
+      if(sf.type==='image'){ const el=it.querySelector('[data-role="url"][data-sub="'+sf.key+'"]'); obj[sf.key]=el?el.value:''; }
+      else if(sf.bilingual){ const de=it.querySelector('[data-sub="'+sf.key+'"][data-lang="de"]'), en=it.querySelector('[data-sub="'+sf.key+'"][data-lang="en"]'); obj[sf.key]={de:de?de.value:'',en:en?en.value:''}; }
+      else { const el=it.querySelector('[data-sub="'+sf.key+'"]'); obj[sf.key]=el?el.value:''; }
+    });
+    arr.push(obj);
+  });
+  listState[f.key]=arr;
+}
+
+// ---------- legal pages editor ----------
+async function renderLegalAdmin(){
+  const main=$('#main');
+  main.innerHTML='<h2>Legal Pages</h2><div class="sub">Privacy Policy &amp; Terms of Service, in Markdown ( ## heading, - list, **bold** ). Saved to the database; shown at <a href="/privacy" target="_blank">/privacy</a> and <a href="/terms" target="_blank">/terms</a>.</div><div id="legalHost"><div class="empty">Loading…</div></div>';
+  let data;
+  try{ data=await api('/api/admin/legal'); }catch(e){ $('#legalHost').innerHTML='<div class="empty">Could not load.</div>'; return; }
+  const host=$('#legalHost'); host.innerHTML='';
+  [['privacy','Privacy Policy','/privacy'],['terms','Terms of Service','/terms']].forEach(function(row){
+    var slug=row[0], label=row[1], url=row[2];
+    var d=data[slug]||{title:{},body:{}}; var t=d.title||{}, b=d.body||{};
+    var box=document.createElement('div'); box.className='field';
+    box.innerHTML='<label class="title">'+label+' &nbsp;<a href="'+url+'" target="_blank" style="font-weight:600;font-size:13px">view ↗</a></label>'
+      +'<div class="bi"><div><span class="lang-tag">Titel (DE)</span><input id="lt_'+slug+'_de" type="text" value="'+esc(t.de||'')+'"></div>'
+      +'<div><span class="lang-tag">Title (EN)</span><input id="lt_'+slug+'_en" type="text" value="'+esc(t.en||'')+'"></div></div>'
+      +'<div style="margin-top:12px"><span class="lang-tag">Inhalt · Markdown (DE)</span><textarea id="lb_'+slug+'_de" style="min-height:280px">'+esc(b.de||'')+'</textarea></div>'
+      +'<div style="margin-top:12px"><span class="lang-tag">Content · Markdown (EN)</span><textarea id="lb_'+slug+'_en" style="min-height:280px">'+esc(b.en||'')+'</textarea></div>'
+      +'<div class="save-bar"><button class="btn" data-save="'+slug+'">Save '+label+'</button></div>';
+    host.appendChild(box);
+    box.querySelector('[data-save]').onclick=function(){ saveLegal(slug); };
+  });
+}
+async function saveLegal(slug){
+  var payload={slug:slug,title:{de:$('#lt_'+slug+'_de').value,en:$('#lt_'+slug+'_en').value},body:{de:$('#lb_'+slug+'_de').value,en:$('#lb_'+slug+'_en').value}};
+  try{ await api('/api/admin/legal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); toast('Saved — changes are live'); }
+  catch(e){ toast('Save failed'); }
+}
+
+// ---------- messages ----------
+async function renderMessages(){
+  const main=$('#main');
+  main.innerHTML=`<h2>Messages</h2><div class="sub">Contact form submissions. Reply opens your email app.</div><div id="msgList"><div class="empty">Loading…</div></div>`;
+  let msgs=[];
+  try{ msgs=await api('/api/admin/messages'); }catch(e){ $('#msgList').innerHTML='<div class="empty">Could not load messages.</div>'; return; }
+  unreadCount=msgs.filter(m=>!m.read).length; refreshUnread();
+  if(!msgs.length){ $('#msgList').innerHTML='<div class="empty">No messages yet.</div>'; return; }
+  $('#msgList').innerHTML = msgs.map(m=>{
+    const d=new Date(m.createdAt).toLocaleString();
+    const subj = encodeURIComponent('Re: Ihre Anfrage an DDC');
+    const body = encodeURIComponent(`\n\n----- Ihre Nachricht -----\n${m.message}`);
+    return `<div class="msg ${m.read?'':'unread'}" data-id="${m.id}">
+      <div class="top">
+        <div><span class="who">${esc(m.name)}</span>
+          ${m.read?'':'<span class="pill new">NEW</span>'} ${m.replied?'<span class="pill rep">REPLIED</span>':''}
+        </div>
+        <div class="meta">${esc(d)}</div>
+      </div>
+      <div class="meta">${esc(m.email)}${m.company?' · '+esc(m.company):''}</div>
+      <div class="body">${esc(m.message)}</div>
+      <div class="row">
+        <a class="btn" href="mailto:${esc(m.email)}?subject=${subj}&body=${body}" data-act="reply">Reply by email</a>
+        <button class="btn ghost" data-act="read">${m.read?'Mark unread':'Mark read'}</button>
+        <button class="btn danger" data-act="del">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('#msgList').querySelectorAll('.msg').forEach(card=>{
+    const id=card.dataset.id;
+    card.querySelector('[data-act="reply"]').addEventListener('click', ()=>setFlags(id,{read:true,replied:true}));
+    card.querySelector('[data-act="read"]').addEventListener('click', ()=>{
+      const isUnread=card.classList.contains('unread'); setFlags(id,{read:isUnread});
+    });
+    card.querySelector('[data-act="del"]').addEventListener('click', ()=>{
+      if(confirm('Delete this message?')) delMsg(id);
+    });
+  });
+}
+async function setFlags(id, flags){ try{ await api('/api/admin/messages/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(flags)}); renderMessages(); }catch(e){ toast('Update failed'); } }
+async function delMsg(id){ try{ await api('/api/admin/messages/'+id,{method:'DELETE'}); toast('Deleted'); renderMessages(); }catch(e){ toast('Delete failed'); } }
+
+boot();
+</script>
+</body>
+</html>

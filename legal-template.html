@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} · DDC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--accent:#1E63E9;--ink:#16233f;--muted:#5A6472;--line:#E4E9F2;--soft:#F4F7FC;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:#fff;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);}
+  .wrap{max-width:820px;margin:0 auto;padding:0 clamp(20px,5vw,40px);}
+
+  header{background:var(--soft);border-bottom:1px solid var(--line);}
+  .bar{max-width:820px;margin:0 auto;padding:18px clamp(20px,5vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:.02em;color:var(--ink);text-decoration:none;}
+  .brand span{color:var(--accent);}
+  .bar-right{display:flex;align-items:center;gap:16px;font-size:14px;}
+  .bar-right a{text-decoration:none;color:var(--muted);font-weight:600;}
+  .bar-right a:hover{color:var(--accent);}
+  .langsw{border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-family:'Space Grotesk',monospace;font-size:12px;color:var(--muted);}
+
+  main{padding:48px 0 70px;}
+  .doc-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.01em;margin-bottom:8px;}
+  .updated{color:var(--muted);font-size:13px;margin-bottom:8px;}
+  .rule{width:56px;height:3px;background:var(--accent);border-radius:2px;margin:14px 0 34px;}
+
+  .content h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:var(--ink);margin:34px 0 12px;padding-top:6px;}
+  .content h3{font-size:16px;font-weight:700;color:var(--ink);margin:22px 0 8px;}
+  .content p{margin:0 0 14px;color:#2c3444;}
+  .content ul,.content ol{margin:0 0 16px;padding-left:22px;}
+  .content li{margin:6px 0;color:#2c3444;}
+  .content strong{color:var(--ink);}
+  .content a{word-break:break-word;}
+  .content hr{border:none;border-top:1px solid var(--line);margin:28px 0;}
+
+  footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13px;}
+  .foot{max-width:820px;margin:0 auto;padding:0 clamp(20px,5vw,40px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .foot a{color:var(--muted);text-decoration:none;margin-left:18px;}
+  .foot a:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="/">DDC <span>·</span> FJ Donner</a>
+    <div class="bar-right">
+      <a href="/">{{BACK}}</a>
+      <a class="langsw" href="/{{SLUG}}?lang={{OTHER_LANG}}">{{OTHER_LABEL}}</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1 class="doc-title">{{TITLE}}</h1>
+    <div class="updated">{{UPDATED_LABEL}} {{UPDATED}}</div>
+    <div class="rule"></div>
+    <article class="content">{{BODY}}</article>
+  </div>
+</main>
+
+<footer>
+  <div class="foot">
+    <div>© <span id="y"></span> DDC – FJ Donner</div>
+    <div>
+      <a href="/privacy">Datenschutz / Privacy</a>
+      <a href="/terms">AGB / Terms</a>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+</body>
+</html>

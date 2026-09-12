@@ -1,0 +1,430 @@
+[
+  {
+    "id": "startseite",
+    "label": "Home (Hero)",
+    "fields": [
+      {
+        "key": "home_eyebrow",
+        "label": "Eyebrow label",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "home_name",
+        "label": "Headline — name (after “DDC —”)",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "home_tagline",
+        "label": "Tagline (use <br> for a line break)",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "home_p1",
+        "label": "Intro paragraph 1",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "home_p2",
+        "label": "Intro paragraph 2",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "home_p3",
+        "label": "Intro paragraph 3",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "home_slogan",
+        "label": "Slogan",
+        "type": "text",
+        "bilingual": true
+      }
+    ]
+  },
+  {
+    "id": "ueber-uns",
+    "label": "About",
+    "fields": [
+      {
+        "key": "about_h2",
+        "label": "Heading",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "about_p1",
+        "label": "Paragraph 1",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "about_p2",
+        "label": "Paragraph 2",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "about_stat1_num",
+        "label": "Stat 1 — number",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "about_stat1_label",
+        "label": "Stat 1 — label",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "about_stat2_num",
+        "label": "Stat 2 — number",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "about_stat2_label",
+        "label": "Stat 2 — label",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "about_stat3_num",
+        "label": "Stat 3 — number",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "about_stat3_label",
+        "label": "Stat 3 — label",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "about_image",
+        "label": "Team / company image",
+        "type": "image",
+        "bilingual": false
+      }
+    ]
+  },
+  {
+    "id": "produktentwicklung",
+    "label": "Product Development",
+    "fields": [
+      {
+        "key": "prod_intro",
+        "label": "Section intro",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "prod_phases",
+        "label": "Phases",
+        "type": "list",
+        "addLabel": "Add phase",
+        "item": [
+          {
+            "key": "image",
+            "label": "Image",
+            "type": "image",
+            "bilingual": false
+          },
+          {
+            "key": "title",
+            "label": "Title",
+            "type": "text",
+            "bilingual": true
+          },
+          {
+            "key": "desc",
+            "label": "Description",
+            "type": "textarea",
+            "bilingual": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dienstleister",
+    "label": "Services",
+    "fields": [
+      {
+        "key": "serv_intro",
+        "label": "Section intro",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_1_title",
+        "label": "Service 1 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_1_desc",
+        "label": "Service 1 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_2_title",
+        "label": "Service 2 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_2_desc",
+        "label": "Service 2 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_3_title",
+        "label": "Service 3 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_3_desc",
+        "label": "Service 3 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_4_title",
+        "label": "Service 4 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_4_desc",
+        "label": "Service 4 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_5_title",
+        "label": "Service 5 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_5_desc",
+        "label": "Service 5 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "serv_6_title",
+        "label": "Service 6 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "serv_6_desc",
+        "label": "Service 6 — description",
+        "type": "textarea",
+        "bilingual": true
+      }
+    ]
+  },
+  {
+    "id": "projekte",
+    "label": "Current Projects",
+    "fields": [
+      {
+        "key": "proj_intro",
+        "label": "Section intro",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "proj_1_cat",
+        "label": "Project 1 — category",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_1_title",
+        "label": "Project 1 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_1_desc",
+        "label": "Project 1 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "proj_1_image",
+        "label": "Project 1 — image",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "proj_2_cat",
+        "label": "Project 2 — category",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_2_title",
+        "label": "Project 2 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_2_desc",
+        "label": "Project 2 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "proj_2_image",
+        "label": "Project 2 — image",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "proj_3_cat",
+        "label": "Project 3 — category",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_3_title",
+        "label": "Project 3 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_3_desc",
+        "label": "Project 3 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "proj_3_image",
+        "label": "Project 3 — image",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "proj_4_cat",
+        "label": "Project 4 — category",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_4_title",
+        "label": "Project 4 — title",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "proj_4_desc",
+        "label": "Project 4 — description",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "proj_4_image",
+        "label": "Project 4 — image",
+        "type": "image",
+        "bilingual": false
+      }
+    ]
+  },
+  {
+    "id": "referenzen",
+    "label": "References",
+    "fields": [
+      {
+        "key": "ref_quote",
+        "label": "Testimonial quote",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "ref_attr",
+        "label": "Testimonial attribution",
+        "type": "text",
+        "bilingual": true
+      },
+      {
+        "key": "ref_logo_1",
+        "label": "Client logo 1",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "ref_logo_2",
+        "label": "Client logo 2",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "ref_logo_3",
+        "label": "Client logo 3",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "ref_logo_4",
+        "label": "Client logo 4",
+        "type": "image",
+        "bilingual": false
+      },
+      {
+        "key": "ref_logo_5",
+        "label": "Client logo 5",
+        "type": "image",
+        "bilingual": false
+      }
+    ]
+  },
+  {
+    "id": "kontakt",
+    "label": "Contact",
+    "fields": [
+      {
+        "key": "contact_intro",
+        "label": "Intro text",
+        "type": "textarea",
+        "bilingual": true
+      },
+      {
+        "key": "contact_name",
+        "label": "Contact person",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "contact_email",
+        "label": "Email",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "contact_phone",
+        "label": "Phone",
+        "type": "text",
+        "bilingual": false
+      },
+      {
+        "key": "contact_address",
+        "label": "Address",
+        "type": "text",
+        "bilingual": false
+      }
+    ]
+  }
+]
